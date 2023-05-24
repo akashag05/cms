@@ -16,11 +16,12 @@ module.exports = {
       cardb3: "#2366BC",
       cardb4: "#134C97",
       grey: "#ECE5E5",
+      bggrey: "#F3F4F7",
     },
     extend: {},
   },
   daisyui: {
-    themes: ["light"],
+    themes: false,
   },
   plugins: [require("daisyui")],
 };
