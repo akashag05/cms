@@ -1,13 +1,22 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import Users from "./adminPages/Users";
 import Blogs from "./adminPages/Blogs";
 import Activities from "./adminPages/Activities";
+import AddSection from "./adminPages/AddSection";
+import { fetchSection } from "./Api/api";
+import DynamicForm from "./adminPages/DynamicForm";
 
 const Page = () => {
+  interface section {
+    section_id: number;
+    section_name: string;
+    status: string;
+  }
   const [selectedMenu, setSelectedMenu] = useState("user");
+  const [data, setData] = useState<section[]>([]);
 
   const handleMenuClick = (menu: any) => {
     setSelectedMenu(menu);
@@ -24,17 +33,28 @@ const Page = () => {
     case "achievement":
       content = <h1>Our Services</h1>;
       break;
-    case "activity":
+    case "activitie":
       content = <Activities />;
       break;
     case "hero":
       content = <h1>Contact Us</h1>;
       break;
+    case "addsection":
+      content = <AddSection />;
+      break;
     default:
-      content = <h1>Page Not Found</h1>;
+      content = <DynamicForm sectionName={selectedMenu} />;
       break;
   }
 
+  const getData = async () => {
+    const fetchedData = await fetchSection();
+    setData(fetchedData);
+  };
+  // console.log("data in file", data);
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <div className="flex">
       <aside className="bg-gray-800 w-1/5 shadow-2xl h-screen border-r-2 border-grey">
@@ -43,20 +63,28 @@ const Page = () => {
             <Image src={logo} alt="" className="h-24 w-20" />
           </div>
           <ul className="p-4">
-            <li className="mb-4">
+            {data.map((item: any, index: any) => {
+              let sectionName = item.section_name.toLowerCase().split("'");
+              //   console.log(sectionName[0]);
+              return (
+                <li className="mb-4" key={index}>
+                  <button
+                    className={`block hover:text-gray-300 ${
+                      selectedMenu === sectionName[0]
+                        ? "text-blue text-xl underline"
+                        : ""
+                    }`}
+                    onClick={(item: any) => handleMenuClick(sectionName[0])}
+                  >
+                    {item.section_name}
+                  </button>
+                </li>
+              );
+            })}
+            {/* <li className="mb-4">
               <button
                 className={`block hover:text-gray-300 ${
-                  selectedMenu === "user" ? "text-gray-300" : ""
-                }`}
-                onClick={() => handleMenuClick("user")}
-              >
-                User&apos;s
-              </button>
-            </li>
-            <li className="mb-4">
-              <button
-                className={`block hover:text-gray-300 ${
-                  selectedMenu === "blog" ? "text-gray-300" : ""
+                  selectedMenu === "blog" ? "text-blue text-xl underline" : ""
                 }`}
                 onClick={() => handleMenuClick("blog")}
               >
@@ -66,7 +94,9 @@ const Page = () => {
             <li className="mb-4">
               <button
                 className={`block hover:text-gray-300 ${
-                  selectedMenu === "activity" ? "text-gray-300" : ""
+                  selectedMenu === "activity"
+                    ? "text-blue text-xl underline"
+                    : ""
                 }`}
                 onClick={() => handleMenuClick("activity")}
               >
@@ -76,7 +106,7 @@ const Page = () => {
             <li className="mb-4">
               <button
                 className={`block hover:text-gray-300 ${
-                  selectedMenu === "hero" ? "text-gray-300" : ""
+                  selectedMenu === "hero" ? "text-blue text-xl underline" : ""
                 }`}
                 onClick={() => handleMenuClick("hero")}
               >
@@ -86,11 +116,35 @@ const Page = () => {
             <li className="mb-4">
               <button
                 className={`block hover:text-gray-300 ${
-                  selectedMenu === "achievement" ? "text-gray-300" : ""
+                  selectedMenu === "achievement"
+                    ? "text-blue text-xl underline"
+                    : ""
                 }`}
                 onClick={() => handleMenuClick("achievement")}
               >
                 Achievement&apos;s
+              </button>
+            </li>*/}
+            <li>
+              <button
+                onClick={() => handleMenuClick("addsection")}
+                className="flex w-max bg-blue p-2 m-2 rounded text-white"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="css-i6dzq1"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Add New Section
               </button>
             </li>
           </ul>

@@ -21,10 +21,10 @@ const Blogs = () => {
 
   const [data, setData] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [formData, setFormData] = useState(initialValue);
+  const [form, setform] = useState(initialValue);
   const [showModal, setShowModal] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [state, setState] = useState(null);
   const getData = async () => {
     const fetchedData = await fetchBlog();
     setData(fetchedData);
@@ -37,14 +37,17 @@ const Blogs = () => {
   const handleChange = (e: any) => {
     console.log(e.target.value);
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setform({ ...form, [name]: value });
   };
 
-  const handleSubmit = () => {
-    let response;
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    let data: any;
     try {
+      let response;
+      data = { ...form, blog_image: state };
       const addData = async () => {
-        response = await addBlog(formData);
+        response = await addBlog(data);
         // setResponse(response);
       };
       addData();
@@ -53,8 +56,8 @@ const Blogs = () => {
       console.log(error);
     }
 
-    console.log("Form Data after Submiting", formData);
-    console.log("Response From Api", response);
+    console.log("Form Data after Submiting", data);
+    // console.log("Response From Api", response);
   };
 
   const handleDelete = (e: any, cell: any) => {
@@ -71,7 +74,7 @@ const Blogs = () => {
     const getSingleData = async () => {
       //   fetchedData = await getSingleUser(id);
       setUserData(fetchedData);
-    //   console.log("Single USer Data", fetchedData.userName);
+      //   console.log("Single USer Data", fetchedData.userName);
     };
     getSingleData();
   };
@@ -168,7 +171,7 @@ const Blogs = () => {
                       <input
                         type="file"
                         name="image"
-                        // value={formData.userEmail}
+                        // value={form.userEmail}
                         // placeholder="Enter User Email"
                         className="file-input file-input-bordered w-full max-w-xs"
                         onChange={handleChange}
@@ -179,7 +182,7 @@ const Blogs = () => {
                       <input
                         type="password"
                         name="short_desc"
-                        value={formData.short_desc}
+                        value={form.short_desc}
                         placeholder="Enter Short Description"
                         className="input input-bordered w-full max-w-xs"
                         onChange={handleChange}
@@ -194,7 +197,7 @@ const Blogs = () => {
                       {/* <input
                     type="textarea"
                     name="short_desc"
-                    value={formData.short_desc}
+                    value={form.short_desc}
                     placeholder="Enter Short Description"
                     className="input input-bordered w-full max-w-xs"
                     onChange={handleChange}
@@ -208,12 +211,12 @@ const Blogs = () => {
                           <input
                             type="radio"
                             name="Active"
-                            value={formData.status}
+                            value={form.status}
                             className="radio"
-                            checked={formData.status == "Active"}
+                            checked={form.status == "Active"}
                             onChange={() =>
-                              setFormData({
-                                ...formData,
+                              setform({
+                                ...form,
                                 status: "Active",
                               })
                             }
@@ -225,12 +228,12 @@ const Blogs = () => {
                           <input
                             type="radio"
                             name="In-Active"
-                            value={formData.status}
+                            value={form.status}
                             className="radio"
-                            checked={formData.status == "In-Active"}
+                            checked={form.status == "In-Active"}
                             onChange={() =>
-                              setFormData({
-                                ...formData,
+                              setform({
+                                ...form,
                                 status: "In-Actibe",
                               })
                             }
@@ -321,113 +324,102 @@ const Blogs = () => {
                 </svg>
               </label>
             </div>
-            <div className="border border-grey p-4 m-3 rounded-md">
-              <div className="flex flex-wrap justify-between">
-                <div className="form-control w-full max-w-xs">
-                  <label className="label">Blog Title</label>
-                  <input
-                    type="text"
-                    name="blog_title"
-                    value={formData.blog_title}
-                    placeholder="Enter Blog title"
-                    className="input input-bordered w-full max-w-xs"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-control w-full max-w-xs">
-                  <label className="label">Upload Blog Image</label>
-                  <input
-                    type="file"
-                    name="image"
-                    // value={formData.userEmail}
-                    className="file-input file-input-bordered w-full max-w-xs"
-                    onChange={(e) =>
-                      //   console.log(e.target.files[0])
-                      setFormData({
-                        ...formData,
-                        blog_image: e.target.files[0].name,
-                      })
-                    }
-                  />
-                </div>
-                <div className="form-control w-full max-w-xs">
-                  <label className="label">Short Description</label>
-                  <input
-                    type="text"
-                    name="short_desc"
-                    value={formData.short_desc}
-                    placeholder="Enter Short Description"
-                    className="input input-bordered w-full max-w-xs"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="form-control w-full max-w-xs">
-                  <label className="label">Long Description</label>
-                  <textarea
-                    className="textarea textarea-bordered h-4"
-                    placeholder="Bio"
-                    name="long_desc"
-                    value={formData.long_desc}
-                    onChange={handleChange}
-                  ></textarea>
-                  {/* <input
-                    type="textarea"
-                    name="short_desc"
-                    value={formData.short_desc}
-                    placeholder="Enter Short Description"
-                    className="input input-bordered w-full max-w-xs"
-                    onChange={handleChange}
-                  /> */}
-                </div>
-                <div className="form-control w-full max-w-xs">
-                  <label className="label">User Status</label>
-                  <div className="flex">
-                    <div className="m-4 flex mt-2">
-                      <label>Active</label>
-                      <input
-                        type="radio"
-                        name="Active"
-                        value={formData.status}
-                        className="radio"
-                        checked={formData.status == "Active"}
-                        onChange={() =>
-                          setFormData({
-                            ...formData,
-                            status: "Active",
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="flex mt-2">
-                      {" "}
-                      <label>In-Active</label>
-                      <input
-                        type="radio"
-                        name="In-Active"
-                        value={formData.status}
-                        className="radio"
-                        checked={formData.status == "In-Active"}
-                        onChange={() =>
-                          setFormData({
-                            ...formData,
-                            status: "In-Actibe",
-                          })
-                        }
-                      />
+            <form onSubmit={handleSubmit}>
+              <div className="border border-grey p-4 m-3 rounded-md">
+                <div className="flex flex-wrap justify-between">
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">Blog Title</label>
+                    <input
+                      type="text"
+                      name="blog_title"
+                      value={form.blog_title}
+                      placeholder="Enter Blog title"
+                      className="input input-bordered w-full max-w-xs"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">Upload Blog Image</label>
+                    <input
+                      type="file"
+                      name="image"
+                      className="file-input file-input-bordered w-full max-w-xs"
+                      onChange={(e) => setState(e.target.files[0]!)}
+                    />
+                  </div>
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">Short Description</label>
+                    <input
+                      type="text"
+                      name="short_desc"
+                      value={form.short_desc}
+                      placeholder="Enter Short Description"
+                      className="input input-bordered w-full max-w-xs"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">Long Description</label>
+                    <textarea
+                      className="textarea textarea-bordered h-4"
+                      placeholder="Bio"
+                      name="long_desc"
+                      value={form.long_desc}
+                      onChange={handleChange}
+                    ></textarea>
+                  </div>
+                  <div className="form-control w-full max-w-xs">
+                    <label className="label">User Status</label>
+                    <div className="flex">
+                      <div className="m-4 flex mt-2">
+                        <label>Active</label>
+                        <input
+                          type="radio"
+                          name="Active"
+                          value={form.status}
+                          className="radio"
+                          checked={form.status == "Active"}
+                          onChange={() =>
+                            setform({
+                              ...form,
+                              status: "Active",
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="flex mt-2">
+                        {" "}
+                        <label>In-Active</label>
+                        <input
+                          type="radio"
+                          name="In-Active"
+                          value={form.status}
+                          className="radio"
+                          checked={form.status == "In-Active"}
+                          onChange={() =>
+                            setform({
+                              ...form,
+                              status: "In-Actibe",
+                            })
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="flex justify-end">
-              <label
-                className="btn btn-primary"
-                htmlFor="my-modal-4"
-                onClick={handleSubmit}
-              >
-                Submit
-              </label>
-            </div>
+              <div className="flex justify-end">
+                <label htmlFor="my-modal-4">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    //   onClick={handleSubmit}
+                  >
+                    Submit
+                  </button>
+                </label>
+              </div>
+            </form>
           </div>
         </div>
         {/* --------------------Add user Modal End----------------------*/}

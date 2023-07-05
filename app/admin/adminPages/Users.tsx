@@ -3,9 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   Column,
   useTable,
-  useSortBy,
-  useGlobalFilter,
-  usePagination,
 } from "react-table";
 import {
   addUser,
@@ -26,8 +23,6 @@ const Users = () => {
   const [data, setData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [formData, setFormData] = useState(initialValue);
-  const [showModal, setShowModal] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
 
   const getData = async () => {
     const fetchedData = await fetchUsers();
@@ -237,7 +232,7 @@ const Users = () => {
   );
 
   const tableInstance = useTable({ columns, data });
-  console.log("table data", data.length);
+//   console.log("table data", data.length);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
