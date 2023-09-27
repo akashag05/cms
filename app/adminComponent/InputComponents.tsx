@@ -17,6 +17,23 @@ export const Textinput = (props: any) => {
     </div>
   );
 };
+export const DateInput = (props: any) => {
+  console.log("kejwfw", props);
+  const name = props.fields.field_name.toLowerCase();
+  return (
+    <div className="form-control w-full max-w-xs">
+      <label className="label">{props.fields.field_name}</label>
+      <input
+        type="date"
+        name={name}
+        value={props.formData.field_name}
+        placeholder="Enter Value"
+        className="input input-bordered w-full max-w-xs"
+        onChange={props.onChangehandler}
+      />
+    </div>
+  );
+};
 export const Emailinput = (props: any) => {
   const name = props.fields.field_name.toLowerCase();
   return (
@@ -38,7 +55,7 @@ export const TextareaInput = (props: any) => {
   const name = props.fields.field_name.toLowerCase();
   return (
     <div className="form-control w-full max-w-xs">
-      <label className="label">{props.field.field_name}</label>
+      <label className="label">{props.fields.field_name}</label>
       <input
         type="textarea"
         name={name}

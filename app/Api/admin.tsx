@@ -2,14 +2,15 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
-import Users from "./adminPages/Users";
-import Blogs from "./adminPages/Blogs";
-import Activities from "./adminPages/Activities";
-import AddSection from "./adminPages/AddSection";
-import { fetchSection } from "./Api/api";
-import DynamicForm from "./adminPages/DynamicForm";
+import Users from "../adminPages/Users";
+import Blogs from "../adminPages/Blogs";
+import Activities from "../adminPages/Activities";
+import AddSection from "../adminPages/AddSection";
+import { fetchSection } from "./api";
+import DynamicForm from "../adminPages/DynamicForm";
+import Members from "../adminPages/Members";
 
-const Page = () => {
+const Admin = () => {
   interface section {
     section_id: number;
     section_name: string;
@@ -30,14 +31,14 @@ const Page = () => {
     case "blog":
       content = <Blogs />;
       break;
-    case "achievement":
+    case "events":
       content = <h1>Our Services</h1>;
       break;
-    case "activitie":
+    case "news":
       content = <Activities />;
       break;
-    case "hero":
-      content = <h1>Contact Us</h1>;
+    case "members":
+      content = <Members />;
       break;
     case "addsection":
       content = <AddSection />;
@@ -47,14 +48,14 @@ const Page = () => {
       break;
   }
 
-  const getData = async () => {
-    const fetchedData = await fetchSection();
-    setData(fetchedData);
-  };
-  // console.log("data in file", data);
-  useEffect(() => {
-    getData();
-  }, []);
+  // const getData = async () => {
+  //   const fetchedData = await fetchSection();
+  //   setData(fetchedData);
+  // };
+  // // console.log("data in file", data);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
   return (
     <div className="flex">
       <aside className="bg-gray-800 w-1/5 shadow-2xl h-screen border-r-2 border-grey">
@@ -63,69 +64,32 @@ const Page = () => {
             <Image src={logo} alt="" className="h-24 w-20" />
           </div>
           <ul className="p-4">
-            {data.map((item: any, index: any) => {
-              let sectionName = item.section_name.toLowerCase().split("'");
-              //   console.log(sectionName[0]);
-              return (
-                <li className="mb-4" key={index}>
-                  <button
-                    className={`block hover:text-gray-300 ${
-                      selectedMenu === sectionName[0]
-                        ? "text-blue text-xl underline"
-                        : ""
-                    }`}
-                    onClick={(item: any) => handleMenuClick(sectionName[0])}
-                  >
-                    {item.section_name}
-                  </button>
-                </li>
-              );
-            })}
-            {/* <li className="mb-4">
+            <li className="mb-4">
               <button
-                className={`block hover:text-gray-300 ${
-                  selectedMenu === "blog" ? "text-blue text-xl underline" : ""
-                }`}
+                className="block hover:text-gray-300"
+                onClick={() => handleMenuClick("user")}
+              >
+                Users
+              </button>
+            </li>
+            <li className="mb-4">
+              <button
+                className="block hover:text-gray-300"
                 onClick={() => handleMenuClick("blog")}
               >
-                Blog&apos;s
+                Blogs
               </button>
             </li>
             <li className="mb-4">
               <button
-                className={`block hover:text-gray-300 ${
-                  selectedMenu === "activity"
-                    ? "text-blue text-xl underline"
-                    : ""
-                }`}
-                onClick={() => handleMenuClick("activity")}
+                className="block hover:text-gray-300"
+                onClick={() => handleMenuClick("members")}
               >
-                Activitie&apos;s
+                Members
               </button>
             </li>
-            <li className="mb-4">
-              <button
-                className={`block hover:text-gray-300 ${
-                  selectedMenu === "hero" ? "text-blue text-xl underline" : ""
-                }`}
-                onClick={() => handleMenuClick("hero")}
-              >
-                Hero&apos;s
-              </button>
-            </li>
-            <li className="mb-4">
-              <button
-                className={`block hover:text-gray-300 ${
-                  selectedMenu === "achievement"
-                    ? "text-blue text-xl underline"
-                    : ""
-                }`}
-                onClick={() => handleMenuClick("achievement")}
-              >
-                Achievement&apos;s
-              </button>
-            </li>*/}
-            <li>
+
+            {/* <li>
               <button
                 onClick={() => handleMenuClick("addsection")}
                 className="flex w-max bg-blue p-2 m-2 rounded text-white"
@@ -146,7 +110,7 @@ const Page = () => {
                 </svg>
                 Add New Section
               </button>
-            </li>
+            </li> */}
           </ul>
         </div>
       </aside>
@@ -156,7 +120,7 @@ const Page = () => {
           <div className="flex items-center justify-between">
             <div>
               <a href="#" className="text-xl font-bold">
-                Mission 500 | Admin Pannel
+                Mission 500 | Admin Panel
               </a>
             </div>
           </div>
@@ -167,4 +131,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Admin;

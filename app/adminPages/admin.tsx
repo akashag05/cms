@@ -1,16 +1,16 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import logo from "../assets/logo.png";
-import Users from "./adminPages/Users";
-import Blogs from "./adminPages/Blogs";
-import Activities from "./adminPages/Activities";
-import AddSection from "./adminPages/AddSection";
-import { fetchSection } from "./Api/api";
-import DynamicForm from "./adminPages/DynamicForm";
-import Members from "./adminPages/Members";
+import logo from "../../assets/logo.png";
+import Users from "./Users";
+import Blogs from "./Blogs";
+import Activities from "./Activities";
+import AddSection from "./AddSection";
+import { fetchSection } from "../Api/api";
+import DynamicForm from "./DynamicForm";
+import Members from "./Members";
 
-const Home = () => {
+const Admin = () => {
   interface section {
     section_id: number;
     section_name: string;
@@ -131,4 +131,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Admin;

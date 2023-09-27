@@ -11,14 +11,14 @@ export const fetchBlog = async () => {
 
 export const addBlog = async (props: any) => {
   console.log(props);
-  const res = await fetch("http://localhost:8080/addBlog", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(props),
-  });
-  console.log(res);
+  // const res = await fetch("http://localhost:8080/addBlog", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(props),
+  // });
+  // console.log(res);
 };
 
 export const deleteblog = async (props: any) => {

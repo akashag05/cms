@@ -7,7 +7,7 @@ import {
   usePagination,
 } from "react-table";
 import { fetchActivities } from "../Api/activityAPI";
-import NoData from "../../components/NoData";
+import NoData from "../components/NoData";
 
 const Activities = () => {
   const initialValue = {
