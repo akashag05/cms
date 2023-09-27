@@ -4,10 +4,10 @@ import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import Users from "./adminPages/Users";
 import Blogs from "./adminPages/Blogs";
-import Activities from "./adminPages/Activities";
-import AddSection from "./adminPages/AddSection";
-import { fetchSection } from "./Api/api";
-import DynamicForm from "./adminPages/DynamicForm";
+// import Activities from "./adminPages/Activities";
+// import AddSection from "./adminPages/AddSection";
+// import { fetchSection } from "./Api/api";
+// import DynamicForm from "./adminPages/DynamicForm";
 import Members from "./adminPages/Members";
 
 const Home = () => {
@@ -34,18 +34,18 @@ const Home = () => {
     case "events":
       content = <h1>Our Services</h1>;
       break;
-    case "news":
-      content = <Activities />;
-      break;
-    case "members":
-      content = <Members />;
-      break;
-    case "addsection":
-      content = <AddSection />;
-      break;
-    default:
-      content = <DynamicForm sectionName={selectedMenu} />;
-      break;
+    // case "news":
+    //   content = <Activities />;
+    //   break;
+    // case "members":
+    //   content = <Members />;
+    //   break;
+    // case "addsection":
+    //   content = <AddSection />;
+    //   break;
+    // default:
+    //   content = <DynamicForm sectionName={selectedMenu} />;
+      // break;
   }
 
   // const getData = async () => {

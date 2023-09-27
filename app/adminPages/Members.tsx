@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import {
   Column,
   useTable,
@@ -16,56 +16,36 @@ const Members = () => {
   const [data, setData] = useState<any[]>([]); // Provide a type
   const [userData, setUserData] = useState<any[]>([]); // Provide a type
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //console.log("Filesss", event.target);
-    if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
-      //console.log("file", selectedFile);
-    } else {
-      setMemberName(event.target.value);
-    }
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+    setSelectedFile(file || null);
   };
+  console.log(selectedFile);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append("memberPhoto", selectedFile);
-      formData.append("memberName", memberName);
-      console.log("file", selectedFile);
-      console.log("name", memberName);
-      console.log("formdata in addMember", formData);
-
-      //   fetch(`${baseURL}/policy/add-policy`, {
-      //     method: "POST",
-      //     headers: {
-      //       Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      //     },
-      //     body: formData,
-      //   })
-      //     .then((res) => {
-      //       return res.json();
-      //     })
-      //     .then((data) => {
-      //       togglePolicyState();
-      //     })
-      //     .catch((error) => {});
+    if (selectedFile && memberName) {
+      const data = {
+        member_photo: selectedFile,
+        memberName: memberName,
+      };
+      // const formData = new FormData();
+      // formData.append("file", selectedFile);
+      // formData.append("memberName", memberName);
+      // console.log(formData);
+      try {
+        const getData = async () => {
+          let response = await addMember(data);
+        };
+        getData();
+      } catch (error) {
+        //console.log(error);
+      }
+    } else {
+      console.log("File and/or Name is missing.");
     }
   };
 
-  //   const getData = async () => {
-  //     const fetchedData = await fetchBlog();
-  //     setData(fetchedData);
-  //   };
-
-  //   useEffect(() => {
-  //     getData();
-  //   }, []);
-  //   const handleDelete = (e: React.MouseEvent, cell: any) => {
-  //     const id = cell.row.values.blog_id;
-  //     deleteblog(id);
-  //     getData();
-  //   };
   const columns = React.useMemo<Column<any>[]>(
     () => [
       {
@@ -125,7 +105,7 @@ const Members = () => {
                 </svg>
               </label>
             </div>
-            <form onSubmit={handleSubmit}>
+            <div>
               <div className="divider"></div>
               <div>
                 <label className="label">
@@ -137,12 +117,12 @@ const Members = () => {
                   placeholder="Type here"
                   value={memberName}
                   className="input input-bordered w-full"
-                  onChange={handleFileChange}
+                  onChange={(event: any) => setMemberName(event.target.value)}
                 />
               </div>
               <div className="pt-6">
                 <input
-                  name="selectedFile"
+                  // name="selectedFile"
                   type="file"
                   accept=".png"
                   onChange={handleFileChange}
@@ -150,13 +130,11 @@ const Members = () => {
                 />
               </div>
               <div className="flex justify-end">
-                <label htmlFor="my-modal-4">
-                  <button type="submit" className="btn btn-primary">
-                    Submit
-                  </button>
-                </label>
+                <button onClick={handleSubmit} className="btn btn-primary">
+                  Submit
+                </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
         {/* --------------------Add user Modal End----------------------*/}

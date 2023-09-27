@@ -4,10 +4,10 @@ import React, { useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import Users from "./Users";
 import Blogs from "./Blogs";
-import Activities from "./Activities";
-import AddSection from "./AddSection";
-import { fetchSection } from "../Api/api";
-import DynamicForm from "./DynamicForm";
+// import Activities from "./Activities";
+// import AddSection from "./AddSection";
+// import { fetchSection } from "../Api/api";
+// import DynamicForm from "./DynamicForm";
 import Members from "./Members";
 
 const Admin = () => {
@@ -35,16 +35,16 @@ const Admin = () => {
       content = <h1>Our Services</h1>;
       break;
     case "news":
-      content = <Activities />;
+      content = <h1>hi</h1>;
       break;
     case "members":
       content = <Members />;
       break;
     case "addsection":
-      content = <AddSection />;
+      content = <h1>hi</h1>;
       break;
     default:
-      content = <DynamicForm sectionName={selectedMenu} />;
+      content = <h1>hi</h1>;
       break;
   }
 
