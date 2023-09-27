@@ -37,9 +37,9 @@ const Home = () => {
     // case "news":
     //   content = <Activities />;
     //   break;
-    // case "members":
-    //   content = <Members />;
-    //   break;
+    case "members":
+      content = <Members />;
+      break;
     // case "addsection":
     //   content = <AddSection />;
     //   break;
