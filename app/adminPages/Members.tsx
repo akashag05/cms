@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import {
   Column,
   useTable,
@@ -8,57 +8,255 @@ import {
 } from "react-table";
 import { addBlog, fetchBlog, deleteblog } from "../Api/blogAPI";
 import NoData from "../components/NoData";
-import { addMember } from "../Api/membersAPI";
+import {
+  addMember,
+  deleteMember,
+  getMember,
+  getMemberById,
+} from "../Api/membersAPI";
 
 const Members = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [memberName, setMemberName] = useState("");
+  const [editMemberName, setEditMemberName] = useState("");
   const [data, setData] = useState<any[]>([]); // Provide a type
-  const [userData, setUserData] = useState<any[]>([]); // Provide a type
+  const [membersData, setMembersData] = useState<any>({}); // Provide a type
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files && event.target.files[0];
-    setSelectedFile(file || null);
-  };
-  console.log(selectedFile);
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    if (selectedFile && memberName) {
-      const data = {
-        member_photo: selectedFile,
-        memberName: memberName,
-      };
-      // const formData = new FormData();
-      // formData.append("file", selectedFile);
-      // formData.append("memberName", memberName);
-      // console.log(formData);
-      try {
-        const getData = async () => {
-          let response = await addMember(data);
-        };
-        getData();
-      } catch (error) {
-        //console.log(error);
-      }
-    } else {
-      console.log("File and/or Name is missing.");
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedFile(event.target.files[0]);
     }
+  };
+  const handleEditFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedFile(event.target.files[0]);
+    }
+  };
+  // console.log(selectedFile);
+  const getData = async () => {
+    let response = await getMember();
+    setData(response);
+    // console.log("get members response", response);
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("memberPhoto", selectedFile);
+      formData.append("memberName", memberName);
+      console.log("formData", formData);
+
+      fetch("http://localhost:5000/members/addMember", {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => {
+          console.log("response", res);
+          return res.json();
+        })
+        .then((data) => {
+          console.log("File uploaded successfully:", data);
+          console.log("data", data);
+          // console.log(res)
+          // Perform any additional actions or update the UI as needed
+        })
+        .catch((error) => {
+          console.error("Error uploading file:", error);
+          // Handle the error and update the UI accordingly
+        });
+    }
+    getData();
+  };
+
+  const handleDelete = async (cellValue: any) => {
+    let response = await deleteMember(cellValue.row.original.id);
+    getData();
+    // console.log("get members response", response);
+  };
+  let membersId = "";
+  const handleEdit = async (cellValue: any) => {
+    let response = await getMemberById(cellValue.row.original.id);
+    setMembersData(response);
+    membersId = response.id;
+  };
+
+  const handleEditSubmit = () => {
+    console.log("function called");
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("memberPhoto", selectedFile);
+      formData.append("memberName", editMemberName);
+      console.log("formData", formData);
+
+      fetch(`http://localhost:5000/members/updateMember/${membersId}`, {
+        method: "PUT",
+        body: formData,
+      })
+        .then((res) => {
+          console.log("response", res);
+          return res.json();
+        })
+        // .then((data) => {
+        //   console.log("File uploaded successfully:", data);
+        //   console.log("data", data);
+        //   // console.log(res)
+        //   // Perform any additional actions or update the UI as needed
+        // })
+        .catch((error) => {
+          console.error("Error uploading file:", error);
+          // Handle the error and update the UI accordingly
+        });
+    }
+    getData();
   };
 
   const columns = React.useMemo<Column<any>[]>(
     () => [
-      {
-        Header: "Member Id",
-        accessor: "member_id",
-      },
+      // {
+      //   Header: "Member Id",
+      //   accessor: "id",
+      // },
       {
         Header: "Member Name",
-        accessor: "member_name",
+        accessor: "memberName",
       },
       {
         Header: "Member Photo",
         accessor: "member_photo",
+        Cell: ({ cell }) => {
+          return (
+            <div className="text-center">
+              <img
+                src={cell.row.original.memberPhoto_path} // Assuming cell.value contains the image URL
+                alt="Member"
+                style={{ width: "100px", height: "auto" }} // Adjust the size as needed
+              />
+            </div>
+          );
+        },
+      },
+      {
+        Header: "Actions",
+        Cell: ({ cell }: any) => (
+          <div className="flex justify-center space-x-2">
+            <label
+              className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded"
+              onClick={(e) => handleEdit(cell)}
+              htmlFor="my-modal-5"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                stroke="black"
+                strokeWidth="1.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="css-i6dzq1"
+              >
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </label>
+
+            {/* --------------------Edit user Modal Start----------------------*/}
+            <input type="checkbox" id="my-modal-5" className="modal-toggle" />
+            <div className="modal">
+              <div className="modal-box w-7/12 max-w-5xl">
+                <div className="flex justify-between">
+                  <h3 className="font-bold text-lg">Edit Member deatils</h3>
+                  <label htmlFor="my-modal-5" className="hover:cursor-pointer">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="28"
+                      height="28"
+                      stroke="black"
+                      strokeWidth="1.5"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="css-i6dzq1"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </label>
+                </div>
+                <div className="border border-grey p-4 m-3 rounded-md">
+                  <div className="flex flex-wrap justify-between">
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <label className="label">
+                          <span className="label-text text-lg">
+                            Enter Member Name
+                          </span>
+                        </label>
+                        <input
+                          name="memberName"
+                          type="text"
+                          placeholder="Type here"
+                          value={membersData.memberName}
+                          className="input input-bordered w-full"
+                          onChange={(event: any) =>
+                            setEditMemberName(event.target.value)
+                          }
+                        />
+                      </div>
+                      <div className="">
+                        <label className="label">
+                          <span className="label-text text-lg">
+                            Select Member Photo
+                          </span>
+                        </label>
+                        <input
+                          type="file"
+                          accept=".png"
+                          onChange={handleEditFileChange}
+                          className="file-input file-input-bordered file-input-md w-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <label
+                    className="btn btn-primary"
+                    // htmlFor="my-modal-5"
+                    onClick={handleEditSubmit}
+                  >
+                    Submit
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <button
+              className="bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
+              onClick={(e) => handleDelete(cell)}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                stroke="red"
+                strokeWidth="1.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="css-i6dzq1"
+              >
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+            </button>
+          </div>
+        ),
       },
     ],
     []
@@ -107,32 +305,49 @@ const Members = () => {
             </div>
             <div>
               <div className="divider"></div>
-              <div>
-                <label className="label">
-                  <span className="label-text text-lg">Enter Policy Name</span>
-                </label>
-                <input
-                  name="memberName"
-                  type="text"
-                  placeholder="Type here"
-                  value={memberName}
-                  className="input input-bordered w-full"
-                  onChange={(event: any) => setMemberName(event.target.value)}
-                />
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="label">
+                    <span className="label-text text-lg">
+                      Enter Member Name
+                    </span>
+                  </label>
+                  <input
+                    name="memberName"
+                    type="text"
+                    placeholder="Type here"
+                    value={memberName}
+                    className="input input-bordered w-full"
+                    onChange={(event: any) => setMemberName(event.target.value)}
+                  />
+                </div>
+                <div className="">
+                  <label className="label">
+                    <span className="label-text text-lg">
+                      Select Member Photo
+                    </span>
+                  </label>
+                  <input
+                    type="file"
+                    accept=".png"
+                    onChange={handleFileChange}
+                    className="file-input file-input-bordered file-input-md w-full"
+                  />
+                </div>
               </div>
-              <div className="pt-6">
-                <input
-                  // name="selectedFile"
-                  type="file"
-                  accept=".png"
-                  onChange={handleFileChange}
-                  className="file-input file-input-bordered file-input-sm w-full"
-                />
-              </div>
-              <div className="flex justify-end">
-                <button onClick={handleSubmit} className="btn btn-primary">
-                  Submit
-                </button>
+
+              <div className="modal-action flex justify-end">
+                <form method="dialog">
+                  {/* <div className="flex justify-end"> */}
+                  <button
+                    onClick={handleUpload}
+                    disabled={!selectedFile}
+                    className="btn btn-primary"
+                  >
+                    Submit
+                  </button>
+                  {/* </div> */}
+                </form>
               </div>
             </div>
           </div>

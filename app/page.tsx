@@ -9,6 +9,7 @@ import Blogs from "./adminPages/Blogs";
 // import { fetchSection } from "./Api/api";
 // import DynamicForm from "./adminPages/DynamicForm";
 import Members from "./adminPages/Members";
+import Events from "./adminPages/Events";
 
 const Home = () => {
   interface section {
@@ -31,21 +32,19 @@ const Home = () => {
     case "blog":
       content = <Blogs />;
       break;
-    case "events":
-      content = <h1>Our Services</h1>;
-      break;
-    // case "news":
-    //   content = <Activities />;
-    //   break;
+
     case "members":
       content = <Members />;
+      break;
+    case "events":
+      content = <Events />;
       break;
     // case "addsection":
     //   content = <AddSection />;
     //   break;
     // default:
     //   content = <DynamicForm sectionName={selectedMenu} />;
-      // break;
+    // break;
   }
 
   // const getData = async () => {
@@ -86,6 +85,14 @@ const Home = () => {
                 onClick={() => handleMenuClick("members")}
               >
                 Members
+              </button>
+            </li>
+            <li className="mb-4">
+              <button
+                className="block hover:text-gray-300"
+                onClick={() => handleMenuClick("events")}
+              >
+                Events
               </button>
             </li>
 
