@@ -162,7 +162,7 @@ const Members = () => {
         Cell: ({ cell }: any) => (
           <div className="flex justify-center space-x-2">
             <label
-              className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded"
+              className="px-4 py-2 font-bold bg-blue-500 rounded hover:bg-blue-700"
               onClick={(e) => handleEdit(cell)}
               htmlFor="my-modal-5"
             >
@@ -185,7 +185,7 @@ const Members = () => {
             {/* --------------------Edit user Modal Start----------------------*/}
 
             <button
-              className="bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
+              className="px-4 py-2 font-bold bg-red-500 rounded hover:bg-red-700"
               onClick={(e) => handleDelete(cell)}
             >
               <svg
@@ -218,12 +218,12 @@ const Members = () => {
     tableInstance;
 
   return (
-    <div className="p-3 bg-bggrey h-screen">
-      <p className="text-xl pb-5">Member Management</p>
-      <div className="border border-grey bg-white">
+    <div className="h-screen p-3 bg-bggrey">
+      <p className="pb-5 text-xl">Member Management</p>
+      <div className="bg-white border border-grey">
         <div className="flex justify-end">
           <label
-            className="uppercase px-4 py-2 mx-3 my-3 bg-blue rounded text-white font-semibold hover:cursor-pointer"
+            className="px-4 py-2 mx-3 my-3 font-semibold text-white uppercase rounded bg-blue hover:cursor-pointer"
             htmlFor="my-modal-4"
           >
             Add Member
@@ -233,9 +233,9 @@ const Members = () => {
         {/* --------------------Add user Modal Start----------------------*/}
         <input type="checkbox" id="my-modal-4" className="modal-toggle" />
         <div className="modal">
-          <div className="modal-box w-7/12 max-w-5xl">
+          <div className="w-7/12 max-w-5xl modal-box">
             <div className="flex justify-between">
-              <h3 className="font-bold text-lg">Add New Member</h3>
+              <h3 className="text-lg font-bold">Add New Member</h3>
               <label htmlFor="my-modal-4" className="hover:cursor-pointer">
                 <svg
                   viewBox="0 0 24 24"
@@ -258,7 +258,7 @@ const Members = () => {
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <label className="label">
-                    <span className="label-text text-lg">
+                    <span className="text-lg label-text">
                       Enter Member Name
                     </span>
                   </label>
@@ -267,13 +267,13 @@ const Members = () => {
                     type="text"
                     placeholder="Type here"
                     value={memberName}
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                     onChange={(event: any) => setMemberName(event.target.value)}
                   />
                 </div>
                 <div className="">
                   <label className="label">
-                    <span className="label-text text-lg">
+                    <span className="text-lg label-text">
                       Select Member Photo
                     </span>
                   </label>
@@ -281,12 +281,12 @@ const Members = () => {
                     type="file"
                     accept=".png"
                     onChange={handleFileChange}
-                    className="file-input file-input-bordered file-input-md w-full"
+                    className="w-full file-input file-input-bordered file-input-md"
                   />
                 </div>
               </div>
 
-              <div className="modal-action flex justify-end">
+              <div className="flex justify-end modal-action">
                 <form method="dialog">
                   {/* <div className="flex justify-end"> */}
                   <button
@@ -305,7 +305,7 @@ const Members = () => {
         {/* --------------------Add user Modal End----------------------*/}
 
         {data.length != 0 ? (
-          <div className="overflow-x-auto p-4">
+          <div className="p-4 overflow-x-auto">
             <table className="min-w-full bg-white border border-grey">
               <thead>
                 {headerGroups.map((headerGroup, index) => (
@@ -313,7 +313,7 @@ const Members = () => {
                     {headerGroup.headers.map((column, index) => (
                       <th
                         {...column.getHeaderProps()}
-                        className="py-2 px-4 border border-grey font-bold"
+                        className="px-4 py-2 font-bold border border-grey"
                         key={index}
                       >
                         {column.render("Header")}
@@ -334,7 +334,7 @@ const Members = () => {
                       {row.cells.map((cell, index) => (
                         <td
                           {...cell.getCellProps()}
-                          className="py-2 px-4 whitespace-nowrap border border-grey text-center"
+                          className="px-4 py-2 text-center border whitespace-nowrap border-grey"
                           key={index}
                         >
                           {cell.render("Cell")}
@@ -350,9 +350,9 @@ const Members = () => {
           <NoData />
         )}
       </div>
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex items-center justify-center h-screen">
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
           onClick={openModal}
         >
           Open Modal
@@ -363,26 +363,26 @@ const Members = () => {
               {/* Content */}
               <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
                 {/* Header */}
-                <div className="flex items-start justify-between pt-3 px-3 border-solid border-gray-300 rounded-t">
-                  <h3 className="font-bold text-lg">Edit Member deatils</h3>
+                <div className="flex items-start justify-between px-3 pt-3 border-gray-300 border-solid rounded-t">
+                  <h3 className="text-lg font-bold">Edit Member deatils</h3>
                   <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    className="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none focus:outline-none"
                     onClick={closeModal}
                   >
-                    <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                    <span className="block w-6 h-6 text-2xl text-black bg-transparent outline-none focus:outline-none">
                       ×
                     </span>
                   </button>
                 </div>
                 <div className="divider"></div>
                 {/* Body */}
-                <div className="relative px-6 flex-auto">
+                <div className="relative flex-auto px-6">
                   {" "}
                   <div className="flex flex-wrap justify-between">
                     <div className="grid grid-cols-2 gap-6">
                       <div>
                         <label className="label">
-                          <span className="label-text text-lg">
+                          <span className="text-lg label-text">
                             Enter Member Name
                           </span>
                         </label>
@@ -391,7 +391,7 @@ const Members = () => {
                           type="text"
                           placeholder="Type here"
                           value={editMemberName}
-                          className="input input-bordered w-full"
+                          className="w-full input input-bordered"
                           onChange={(event: any) =>
                             setEditMemberName(event.target.value)
                           }
@@ -399,7 +399,7 @@ const Members = () => {
                       </div>
                       <div className="">
                         <label className="label">
-                          <span className="label-text text-lg">
+                          <span className="text-lg label-text">
                             Select Member Photo
                           </span>
                         </label>
@@ -407,16 +407,16 @@ const Members = () => {
                           type="file"
                           accept=".png"
                           onChange={handleEditFileChange}
-                          className="file-input file-input-bordered file-input-md w-full"
+                          className="w-full file-input file-input-bordered file-input-md"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
                 {/* Footer */}
-                <div className="flex items-center justify-end p-6  border-solid border-gray-300 rounded-b">
+                <div className="flex items-center justify-end p-6 border-gray-300 border-solid rounded-b">
                   <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="px-6 py-2 mb-1 mr-1 text-sm font-bold text-red-500 uppercase transition-all duration-150 ease-linear outline-none background-transparent focus:outline-none"
                     type="button"
                     onClick={closeModal}
                   >

@@ -56,11 +56,12 @@ const Home = () => {
   //   getData();
   // }, []);
   return (
-    <div className="flex">
-      <aside className="bg-gray-800 w-1/5 shadow-2xl h-screen border-r-2 border-grey">
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar */}
+      <aside className="w-1/5 bg-gray-800 border-r-2 shadow-2xl border-grey">
         <div className="p-6">
           <div>
-            <Image src={logo} alt="" className="h-24 w-20" />
+            <Image src={logo} alt="" className="w-20 h-24" />
           </div>
           <ul className="p-4">
             <li className="mb-4">
@@ -95,35 +96,14 @@ const Home = () => {
                 Events
               </button>
             </li>
-
-            {/* <li>
-              <button
-                onClick={() => handleMenuClick("addsection")}
-                className="flex w-max bg-blue p-2 m-2 rounded text-white"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="24"
-                  height="24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="css-i6dzq1"
-                >
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Add New Section
-              </button>
-            </li> */}
           </ul>
         </div>
       </aside>
 
+      {/* Main Content */}
       <div className="flex-grow">
-        <nav className="bg-gray-900 p-4 shadow-xl border-b-2 border-grey">
+        {/* Navbar */}
+        <nav className="p-4 bg-gray-900 border-b-2 shadow-xl border-grey">
           <div className="flex items-center justify-between">
             <div>
               <a href="#" className="text-xl font-bold">
@@ -132,7 +112,12 @@ const Home = () => {
             </div>
           </div>
         </nav>
-        <div className="p-4">{content}</div>
+
+        {/* Content Area */}
+        <div className="min-h-screen p-4 overflow-auto">
+          {/* Your content goes here */}
+          {content}
+        </div>
       </div>
     </div>
   );
