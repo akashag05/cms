@@ -20,7 +20,8 @@ const Members = () => {
   const [memberName, setMemberName] = useState("");
   const [editMemberName, setEditMemberName] = useState("");
   const [data, setData] = useState<any[]>([]); // Provide a type
-  const [membersData, setMembersData] = useState<any>({}); // Provide a type
+  const [memberID, setMemberID] = useState<any>(null); // Provide a type
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -71,27 +72,46 @@ const Members = () => {
     getData();
   };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const handleDelete = async (cellValue: any) => {
     let response = await deleteMember(cellValue.row.original.id);
     getData();
-    // console.log("get members response", response);
   };
-  let membersId = "";
-  const handleEdit = async (cellValue: any) => {
-    let response = await getMemberById(cellValue.row.original.id);
-    setMembersData(response);
-    membersId = response.id;
+
+  const handleEdit = async (cell: any) => {
+    setMemberID(cell.row.original.id);
+    console.log("Single USer Data", memberID);
+    await fetch(
+      `http://localhost:5000/members/getMember/${cell.row.original.id}`,
+      {
+        method: "GET", // Use GET method for a GET request
+      }
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        setEditMemberName(res[0].memberName);
+      })
+      .then(() => {
+        openModal();
+      });
   };
 
   const handleEditSubmit = () => {
-    console.log("function called");
+    console.log("function called", memberID);
     if (selectedFile) {
       const formData = new FormData();
       formData.append("memberPhoto", selectedFile);
       formData.append("memberName", editMemberName);
       console.log("formData", formData);
 
-      fetch(`http://localhost:5000/members/updateMember/${membersId}`, {
+      fetch(`http://localhost:5000/members/updateMember/${memberID}`, {
         method: "PUT",
         body: formData,
       })
@@ -102,14 +122,13 @@ const Members = () => {
         // .then((data) => {
         //   console.log("File uploaded successfully:", data);
         //   console.log("data", data);
-        //   // console.log(res)
-        //   // Perform any additional actions or update the UI as needed
         // })
         .catch((error) => {
           console.error("Error uploading file:", error);
           // Handle the error and update the UI accordingly
         });
     }
+    closeModal();
     getData();
   };
 
@@ -164,75 +183,6 @@ const Members = () => {
             </label>
 
             {/* --------------------Edit user Modal Start----------------------*/}
-            <input type="checkbox" id="my-modal-5" className="modal-toggle" />
-            <div className="modal">
-              <div className="modal-box w-7/12 max-w-5xl">
-                <div className="flex justify-between">
-                  <h3 className="font-bold text-lg">Edit Member deatils</h3>
-                  <label htmlFor="my-modal-5" className="hover:cursor-pointer">
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="28"
-                      height="28"
-                      stroke="black"
-                      strokeWidth="1.5"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="css-i6dzq1"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </label>
-                </div>
-                <div className="border border-grey p-4 m-3 rounded-md">
-                  <div className="flex flex-wrap justify-between">
-                    <div className="grid grid-cols-2 gap-6">
-                      <div>
-                        <label className="label">
-                          <span className="label-text text-lg">
-                            Enter Member Name
-                          </span>
-                        </label>
-                        <input
-                          name="memberName"
-                          type="text"
-                          placeholder="Type here"
-                          value={membersData.memberName}
-                          className="input input-bordered w-full"
-                          onChange={(event: any) =>
-                            setEditMemberName(event.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="">
-                        <label className="label">
-                          <span className="label-text text-lg">
-                            Select Member Photo
-                          </span>
-                        </label>
-                        <input
-                          type="file"
-                          accept=".png"
-                          onChange={handleEditFileChange}
-                          className="file-input file-input-bordered file-input-md w-full"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-end">
-                  <label
-                    className="btn btn-primary"
-                    // htmlFor="my-modal-5"
-                    onClick={handleEditSubmit}
-                  >
-                    Submit
-                  </label>
-                </div>
-              </div>
-            </div>
 
             <button
               className="bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
@@ -398,6 +348,94 @@ const Members = () => {
           </div>
         ) : (
           <NoData />
+        )}
+      </div>
+      <div className="flex justify-center items-center h-screen">
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={openModal}
+        >
+          Open Modal
+        </button>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+            <div className="relative w-auto max-w-3xl mx-auto my-6">
+              {/* Content */}
+              <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+                {/* Header */}
+                <div className="flex items-start justify-between pt-3 px-3 border-solid border-gray-300 rounded-t">
+                  <h3 className="font-bold text-lg">Edit Member deatils</h3>
+                  <button
+                    className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={closeModal}
+                  >
+                    <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      ×
+                    </span>
+                  </button>
+                </div>
+                <div className="divider"></div>
+                {/* Body */}
+                <div className="relative px-6 flex-auto">
+                  {" "}
+                  <div className="flex flex-wrap justify-between">
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <label className="label">
+                          <span className="label-text text-lg">
+                            Enter Member Name
+                          </span>
+                        </label>
+                        <input
+                          name="memberName"
+                          type="text"
+                          placeholder="Type here"
+                          value={editMemberName}
+                          className="input input-bordered w-full"
+                          onChange={(event: any) =>
+                            setEditMemberName(event.target.value)
+                          }
+                        />
+                      </div>
+                      <div className="">
+                        <label className="label">
+                          <span className="label-text text-lg">
+                            Select Member Photo
+                          </span>
+                        </label>
+                        <input
+                          type="file"
+                          accept=".png"
+                          onChange={handleEditFileChange}
+                          className="file-input file-input-bordered file-input-md w-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Footer */}
+                <div className="flex items-center justify-end p-6  border-solid border-gray-300 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={closeModal}
+                  >
+                    Close
+                  </button>
+                  <button
+                    className="bg-[#5393E8] text-white active:bg-[#5393E8] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={handleEditSubmit}
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black opacity-50"></div>
         )}
       </div>
     </div>
