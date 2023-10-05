@@ -17,6 +17,7 @@ import NoData from "../components/NoData";
 import { addMember } from "../Api/membersAPI";
 import { getAllEventsNews } from "../Api/getAllEvents";
 import { AiFillEdit } from "react-icons/ai";
+import { RxCross1 } from "react-icons/rx";
 import { close } from "fs";
 import { deleteEventNews } from "../Api/deleteEvent";
 import { ToastContainer, toast } from "react-toastify";
@@ -221,7 +222,7 @@ const Events = () => {
         Cell: ({ cell }: any) => (
           <div className="flex justify-center space-x-2">
             <label
-              className="px-4 py-2 font-bold bg-blue-500 rounded hover:bg-blue-700"
+              className="px-4 py-2 font-bold bg-blue-500 rounded cursor-pointer hover:bg-blue-700"
               onClick={(e) => handleEdit(cell)}
               htmlFor="my-modal-5"
             >
@@ -341,14 +342,17 @@ const Events = () => {
   };
 
   return (
-    <div className="h-screen p-3 bg-bggrey">
+    <div className="h-screen p-3 overflow-auto pb-28 bg-bggrey">
       <p className="pb-5 text-xl">Events Management</p>
       <ToastContainer />
       <div className="bg-white border border-grey">
         <div className="flex justify-between">
-          <div className="relative inline-block text-left">
+          <div className="items-center justify-start mt-3">
+            <label className="px-2 my-4 ml-2 font-semibold">
+              Select Type :{" "}
+            </label>
             <select
-              className="block w-full px-4 py-2 mx-3 my-3 leading-tight bg-white border border-gray-300 rounded shadow appearance-none hover:border-gray-400 focus:outline-none focus:shadow-outline"
+              className="px-6 py-1 bg-white border border-gray-300 rounded shadow appearance-none focus:outline-none focus:shadow-outline"
               name="options"
               value={options}
               onChange={(event: any) => setOptions(event.target.value)}
@@ -357,8 +361,9 @@ const Events = () => {
               <option value="News">News</option>
             </select>
           </div>
+
           <label
-            className="block px-4 py-2 mx-3 my-3 font-semibold leading-tight text-white border border-gray-300 rounded shadow appearance-none bg-blue hover:border-gray-400 focus:outline-none focus:shadow-outline"
+            className="block px-4 py-2 mx-3 my-3 font-semibold leading-tight text-white border border-gray-300 rounded shadow appearance-none cursor-pointer bg-blue hover:border-gray-400 focus:outline-none focus:shadow-outline"
             // htmlFor="my-modal-4"
             onClick={() => setIsOpen(true)}
           >
@@ -374,18 +379,16 @@ const Events = () => {
               {/* Content */}
               <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
                 {/* Header */}
-                <div className="flex items-start justify-between px-3 pt-4 border-gray-300 border-solid rounded-t">
-                  <h3 className="text-lg font-bold">Add New Media</h3>
+                <div className="flex items-center justify-between px-4 mt-4 border-gray-300 border-solid rounded-t">
+                  <h3 className="text-2xl font-bold">Add New Media</h3>
                   <button
-                    className="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none focus:outline-none"
+                    className="p-2 ml-auto text-2xl text-black bg-transparent border-0 outline-none focus:outline-none"
                     onClick={() => setIsOpen(false)}
                   >
-                    <span className="block w-6 h-6 text-2xl text-black bg-transparent outline-none focus:outline-none">
-                      ×
-                    </span>
+                   <RxCross1 />
                   </button>
                 </div>
-                <div className="divider"></div>
+                <div className="items-start divider"></div>
                 {/* Body */}
                 <div className="relative flex-auto px-6">
                   {" "}
@@ -597,25 +600,23 @@ const Events = () => {
           <NoData />
         )}
       </div>
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center">
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
             <div className="relative w-auto max-w-3xl mx-auto my-6">
               {/* Content */}
               <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
                 {/* Header */}
-                <div className="flex items-start justify-between px-3 pt-4 border-gray-300 border-solid rounded-t">
-                  <h3 className="text-lg font-bold">Edit details</h3>
+                <div className="flex items-center justify-between px-4 mt-4 border-gray-300 border-solid rounded-t">
+                  <h3 className="text-2xl font-bold">Edit Media</h3>
                   <button
-                    className="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none focus:outline-none"
+                    className="p-2 ml-auto text-2xl text-black bg-transparent border-0 outline-none focus:outline-none"
                     onClick={closeEditModal}
                   >
-                    <span className="block w-6 h-6 text-2xl text-black bg-transparent outline-none focus:outline-none">
-                      ×
-                    </span>
+                   <RxCross1 />
                   </button>
                 </div>
-                <div className="divider"></div>
+                <div className="items-start divider"></div>
                 {/* Body */}
                 <div className="relative flex-auto px-6">
                   {" "}

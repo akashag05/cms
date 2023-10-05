@@ -114,7 +114,7 @@ const Home = () => {
         </nav>
 
         {/* Content Area */}
-        <div className="min-h-screen p-4 overflow-auto">
+        <div className="p-4 overflow-auto min-h-fit">
           {/* Your content goes here */}
           {content}
         </div>
