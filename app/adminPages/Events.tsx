@@ -199,7 +199,7 @@ const Events = () => {
         accessor: "participants",
       },
       {
-        Header: "Photo",
+        Header: "Image",
         accessor: "eventImage",
         Cell: ({ cell }) => {
           return (
@@ -458,7 +458,7 @@ const Events = () => {
                           <div className="">
                             <label className="label">
                               <span className="text-lg label-text">
-                                Select Event Image
+                                Select Image (.png)
                               </span>
                             </label>
                             <input
@@ -471,7 +471,7 @@ const Events = () => {
                           <div>
                             <label className="label">
                               <span className="text-lg label-text">
-                                Enter Event Link
+                                Enter Link
                               </span>
                             </label>
                             <input
@@ -521,7 +521,7 @@ const Events = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-end mb-3">
+                      <div className="flex justify-end mb-6">
                         <button
                           onClick={handleUpload}
                           disabled={
@@ -687,7 +687,7 @@ const Events = () => {
                           <div className="">
                             <label className="label">
                               <span className="text-lg label-text">
-                                Select Event Image
+                                Select Image (.png)
                               </span>
                             </label>
                             <input
@@ -700,7 +700,7 @@ const Events = () => {
                           <div>
                             <label className="label">
                               <span className="text-lg label-text">
-                                Enter Event Link
+                                Enter Link
                               </span>
                             </label>
                             <input
@@ -750,7 +750,7 @@ const Events = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-end mb-3">
+                      <div className="flex justify-end mb-6">
                         <button
                           onClick={handleEditUpload}
                           disabled={!editSelectedImage}
