@@ -14,6 +14,7 @@ import {
   getMember,
   getMemberById,
 } from "../Api/membersAPI";
+import { baseUrl } from "../../constants";
 
 const Members = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -50,7 +51,7 @@ const Members = () => {
       formData.append("memberName", memberName);
       console.log("formData", formData);
 
-      fetch("http://localhost:5000/members/addMember", {
+      fetch(baseUrl + "/members/addMember", {
         method: "POST",
         body: formData,
       })

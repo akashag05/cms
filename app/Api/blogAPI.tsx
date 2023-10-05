@@ -1,17 +1,20 @@
+import { baseUrl } from "../../constants";
+
 export const fetchBlog = async () => {
-  const res = await fetch("http://localhost:8080/blog", {
+  const res = await fetch(baseUrl+ "/blog/getAllBlogs", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   });
   const data = await res.json();
+  console.log("data", data);
   return data;
 };
 
 export const addBlog = async (props: any) => {
   console.log(props);
-  // const res = await fetch("http://localhost:8080/addBlog", {
+  // const res = await fetch(baseUrl+ "/addBlog", {
   //   method: "POST",
   //   headers: {
   //     "Content-Type": "application/json",
@@ -21,8 +24,18 @@ export const addBlog = async (props: any) => {
   // console.log(res);
 };
 
+export const fetchSingleBlog = async (props: any) => {
+  const res = await fetch(baseUrl+ `/blog/getSingleBlog/${props}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await res.json();
+  return data;
+};
 export const deleteblog = async (props: any) => {
-  const res = await fetch(`http://localhost:8080/deleteblog/${props}`, {
+  const res = await fetch(baseUrl+ `/blog/deleteBlog/${props}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

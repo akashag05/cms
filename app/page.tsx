@@ -28,16 +28,15 @@ const Home = () => {
   switch (selectedMenu) {
     case "user":
       content = <Users />;
-      break;
-    case "blog":
-      content = <Blogs />;
-      break;
-
+     break;
     case "members":
       content = <Members />;
       break;
     case "events":
       content = <Events />;
+      break;
+    case "blogs":
+      content = <Blogs />;
       break;
     // case "addsection":
     //   content = <AddSection />;
@@ -74,7 +73,7 @@ const Home = () => {
             <li className="mb-4">
               <button
                 className="block hover:text-gray-300"
-                onClick={() => handleMenuClick("blog")}
+                onClick={() => handleMenuClick("blogs")}
               >
                 Blogs
               </button>
@@ -95,6 +94,14 @@ const Home = () => {
                 Events
               </button>
             </li>
+            {/* <li className="mb-4">
+              <button
+                className="block hover:text-gray-300"
+                onClick={() => handleMenuClick("blogs")}
+              >
+                Blogs
+              </button>
+            </li> */}
 
             {/* <li>
               <button
