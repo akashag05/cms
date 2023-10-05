@@ -1,32 +1,18 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import {
-  Column,
-  useTable,
-  useSortBy,
-  useGlobalFilter,
-  usePagination,
-} from "react-table";
+import { Column, useTable } from "react-table";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import NoData from "../components/NoData";
-import {
-  addMember,
-  deleteMember,
-  getMember,
-  getMemberById,
-} from "../Api/membersAPI";
 import { deleteblog, fetchBlog, fetchSingleBlog } from "../Api/blogAPI";
 import { baseUrl } from "../../constants";
 
 const Blogs = () => {
   const [value, setValue] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [blogHeading, setBlogHeading] = useState("");
   const [postedDate, setPostedDate] = useState("");
   const [writtenBy, setWrittenBy] = useState("");
   const [singleBlogData, setSingleBlogData] = useState<any>({});
   const [data, setData] = useState<any[]>([]); // Provide a type
-  const [memberID, setMemberID] = useState<any>(null); // Provide a type
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // console.log(selectedFile);

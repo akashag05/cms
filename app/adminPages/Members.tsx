@@ -1,19 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import {
-  Column,
-  useTable,
-  useSortBy,
-  useGlobalFilter,
-  usePagination,
-} from "react-table";
-import { addBlog, fetchBlog, deleteblog } from "../Api/blogAPI";
+import { Column, useTable } from "react-table";
 import NoData from "../components/NoData";
-import {
-  addMember,
-  deleteMember,
-  getMember,
-  getMemberById,
-} from "../Api/membersAPI";
+import { deleteMember, getMember } from "../Api/membersAPI";
 import { baseUrl } from "../../constants";
 
 const Members = () => {
