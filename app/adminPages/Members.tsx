@@ -1,9 +1,15 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { Column, useTable } from "react-table";
 import NoData from "../components/NoData";
-import { deleteMember, getMember } from "../Api/membersAPI";
-import { baseUrl } from "../../constants";
-
+import {
+  addMember,
+  deleteMember,
+  getMember,
+  getMemberById,
+} from "../Api/membersAPI";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { RxCross1 } from "react-icons/rx";
 const Members = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [memberName, setMemberName] = useState("");
@@ -11,7 +17,8 @@ const Members = () => {
   const [data, setData] = useState<any[]>([]); // Provide a type
   const [memberID, setMemberID] = useState<any>(null); // Provide a type
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [dataUpdate, setDataUpdate] = useState(false);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setSelectedFile(event.target.files[0]);
@@ -32,6 +39,10 @@ const Members = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    getData();
+  }, [dataUpdate]);
+
   const handleUpload = () => {
     if (selectedFile) {
       const formData = new FormData();
@@ -48,8 +59,14 @@ const Members = () => {
           return res.json();
         })
         .then((data) => {
-          console.log("File uploaded successfully:", data);
-          console.log("data", data);
+          toast.success("Added Successfully!", {
+            position: "bottom-right",
+            autoClose: 1000,
+          });
+          // console.log("File uploaded successfully:", data);
+          setIsOpen(false);
+          setDataUpdate(!dataUpdate);
+          // console.log("data", data);
           // console.log(res)
           // Perform any additional actions or update the UI as needed
         })
@@ -58,7 +75,7 @@ const Members = () => {
           // Handle the error and update the UI accordingly
         });
     }
-    getData();
+    // getData();
   };
 
   const openModal = () => {
@@ -71,7 +88,14 @@ const Members = () => {
 
   const handleDelete = async (cellValue: any) => {
     let response = await deleteMember(cellValue.row.original.id);
-    getData();
+    // getData();
+    if (response) {
+      setDataUpdate(!dataUpdate);
+      toast.error("Deleted Successfully!", {
+        position: "bottom-right",
+        autoClose: 1000,
+      });
+    }
   };
 
   const handleEdit = async (cell: any) => {
@@ -108,10 +132,17 @@ const Members = () => {
           console.log("response", res);
           return res.json();
         })
-        // .then((data) => {
-        //   console.log("File uploaded successfully:", data);
-        //   console.log("data", data);
-        // })
+        .then((data) => {
+          toast.success("Updated Successfully!", {
+            position: "bottom-right",
+            autoClose: 1000,
+          });
+          // console.log("File uploaded successfully:", data);
+          setIsModalOpen(false);
+          setSelectedFile(null);
+          setDataUpdate(!dataUpdate);
+          // console.log("data", data);
+        })
         .catch((error) => {
           console.error("Error uploading file:", error);
           // Handle the error and update the UI accordingly
@@ -136,7 +167,7 @@ const Members = () => {
         accessor: "member_photo",
         Cell: ({ cell }) => {
           return (
-            <div className="text-center">
+            <div className="flex items-center justify-center h-full">
               <img
                 src={cell.row.original.memberPhoto_path} // Assuming cell.value contains the image URL
                 alt="Member"
@@ -151,7 +182,7 @@ const Members = () => {
         Cell: ({ cell }: any) => (
           <div className="flex justify-center space-x-2">
             <label
-              className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded"
+              className="px-4 py-2 font-bold bg-blue-500 rounded cursor-pointer hover:bg-blue-700"
               onClick={(e) => handleEdit(cell)}
               htmlFor="my-modal-5"
             >
@@ -174,7 +205,7 @@ const Members = () => {
             {/* --------------------Edit user Modal Start----------------------*/}
 
             <button
-              className="bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded"
+              className="px-4 py-2 font-bold bg-red-500 rounded hover:bg-red-700"
               onClick={(e) => handleDelete(cell)}
             >
               <svg
@@ -207,13 +238,15 @@ const Members = () => {
     tableInstance;
 
   return (
-    <div className="p-3 bg-bggrey h-screen">
-      <p className="text-xl pb-5">Member Management</p>
-      <div className="border border-grey bg-white">
+    <div className="h-screen p-3 overflow-auto pb-28 bg-bggrey">
+      <p className="pb-5 text-xl">Member Management</p>
+      <ToastContainer />
+      <div className="bg-white border border-grey">
         <div className="flex justify-end">
           <label
-            className="uppercase px-4 py-2 mx-3 my-3 bg-blue rounded text-white font-semibold hover:cursor-pointer"
-            htmlFor="my-modal-4"
+            className="block px-4 py-2 mx-3 my-3 font-semibold leading-tight text-white border border-gray-300 rounded shadow appearance-none cursor-pointer bg-blue hover:border-gray-400 focus:outline-none focus:shadow-outline"
+            // htmlFor="my-modal-4"
+            onClick={() => setIsOpen(true)}
           >
             Add Member
           </label>
@@ -221,88 +254,94 @@ const Members = () => {
 
         {/* --------------------Add user Modal Start----------------------*/}
         <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-        <div className="modal">
-          <div className="modal-box w-7/12 max-w-5xl">
-            <div className="flex justify-between">
-              <h3 className="font-bold text-lg">Add New Member</h3>
-              <label htmlFor="my-modal-4" className="hover:cursor-pointer">
-                <svg
-                  viewBox="0 0 24 24"
-                  width="28"
-                  height="28"
-                  stroke="black"
-                  strokeWidth="1.5"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="css-i6dzq1"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </label>
-            </div>
-            <div>
-              <div className="divider"></div>
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="label">
-                    <span className="label-text text-lg">
-                      Enter Member Name
-                    </span>
-                  </label>
-                  <input
-                    name="memberName"
-                    type="text"
-                    placeholder="Type here"
-                    value={memberName}
-                    className="input input-bordered w-full"
-                    onChange={(event: any) => setMemberName(event.target.value)}
-                  />
-                </div>
-                <div className="">
-                  <label className="label">
-                    <span className="label-text text-lg">
-                      Select Member Photo
-                    </span>
-                  </label>
-                  <input
-                    type="file"
-                    accept=".png"
-                    onChange={handleFileChange}
-                    className="file-input file-input-bordered file-input-md w-full"
-                  />
-                </div>
-              </div>
-
-              <div className="modal-action flex justify-end">
-                <form method="dialog">
-                  {/* <div className="flex justify-end"> */}
+        {isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+            <div className="relative w-auto max-w-3xl mx-auto my-6">
+              {/* Content */}
+              <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+                {/* Header */}
+                <div className="flex items-center justify-between px-4 mt-4 border-gray-300 border-solid rounded-t">
+                  <h3 className="text-2xl font-bold">Add New Member</h3>
                   <button
-                    onClick={handleUpload}
-                    disabled={!selectedFile}
-                    className="btn btn-primary"
+                    className="p-2 ml-auto text-2xl text-black bg-transparent border-0 outline-none focus:outline-none"
+                    onClick={() => setIsOpen(false)}
                   >
-                    Submit
+                   <RxCross1 />
                   </button>
-                  {/* </div> */}
-                </form>
+                </div>
+                <div className="items-start divider"></div>
+                {/* Body */}
+                <div className="relative flex-auto px-6">
+                  {" "}
+                  <div className="">
+                    <div>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label className="label">
+                            <span className="text-lg label-text">
+                              Enter Member Name
+                            </span>
+                          </label>
+                          <input
+                            name="memberName"
+                            type="text"
+                            placeholder="Type here"
+                            value={memberName}
+                            className="w-full input input-bordered"
+                            onChange={(event: any) =>
+                              setMemberName(event.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="">
+                          <label className="label">
+                            <span className="text-lg label-text">
+                              Select Member Photo
+                            </span>
+                          </label>
+                          <input
+                            type="file"
+                            accept=".png"
+                            onChange={handleFileChange}
+                            className="w-full file-input file-input-bordered file-input-md"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end mt-3 mb-3">
+                        <form method="dialog">
+                          {/* <div className="flex justify-end"> */}
+                          <button
+                            onClick={handleUpload}
+                            disabled={!selectedFile || !memberName}
+                            className="btn btn-primary"
+                          >
+                            Submit
+                          </button>
+                          {/* </div> */}
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+        {isOpen && <div className="fixed inset-0 bg-black opacity-50"></div>}
         {/* --------------------Add user Modal End----------------------*/}
 
         {data.length != 0 ? (
-          <div className="overflow-x-auto p-4">
+          <div className="p-4 overflow-x-auto">
             <table className="min-w-full bg-white border border-grey">
               <thead>
                 {headerGroups.map((headerGroup, index) => (
                   <tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                    <th>Sr.No.</th>
                     {headerGroup.headers.map((column, index) => (
                       <th
                         {...column.getHeaderProps()}
-                        className="py-2 px-4 border border-grey font-bold"
+                        className="px-4 py-2 font-bold border border-grey"
                         key={index}
                       >
                         {column.render("Header")}
@@ -320,10 +359,13 @@ const Members = () => {
                       className="border border-gray-300"
                       key={index}
                     >
+                      <td className="px-4 py-2 text-center border whitespace-nowrap border-grey">
+                        {index + 1}
+                      </td>
                       {row.cells.map((cell, index) => (
                         <td
                           {...cell.getCellProps()}
-                          className="py-2 px-4 whitespace-nowrap border border-grey text-center"
+                          className="px-4 py-2 text-center border whitespace-nowrap border-grey"
                           key={index}
                         >
                           {cell.render("Cell")}
@@ -339,39 +381,31 @@ const Members = () => {
           <NoData />
         )}
       </div>
-      <div className="flex justify-center items-center h-screen">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={openModal}
-        >
-          Open Modal
-        </button>
+      <div className="flex items-center justify-center">
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
             <div className="relative w-auto max-w-3xl mx-auto my-6">
               {/* Content */}
               <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
                 {/* Header */}
-                <div className="flex items-start justify-between pt-3 px-3 border-solid border-gray-300 rounded-t">
-                  <h3 className="font-bold text-lg">Edit Member deatils</h3>
+                <div className="flex items-center justify-between px-4 mt-4 border-gray-300 border-solid rounded-t">
+                  <h3 className="text-2xl font-bold">Edit Member Details</h3>
                   <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    className="p-2 ml-auto text-2xl text-black bg-transparent border-0 outline-none focus:outline-none"
                     onClick={closeModal}
                   >
-                    <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
+                   <RxCross1 />
                   </button>
                 </div>
-                <div className="divider"></div>
+                <div className="items-start divider"></div>
                 {/* Body */}
-                <div className="relative px-6 flex-auto">
+                <div className="relative flex-auto px-6">
                   {" "}
                   <div className="flex flex-wrap justify-between">
                     <div className="grid grid-cols-2 gap-6">
                       <div>
                         <label className="label">
-                          <span className="label-text text-lg">
+                          <span className="text-lg label-text">
                             Enter Member Name
                           </span>
                         </label>
@@ -380,7 +414,7 @@ const Members = () => {
                           type="text"
                           placeholder="Type here"
                           value={editMemberName}
-                          className="input input-bordered w-full"
+                          className="w-full input input-bordered"
                           onChange={(event: any) =>
                             setEditMemberName(event.target.value)
                           }
@@ -388,7 +422,7 @@ const Members = () => {
                       </div>
                       <div className="">
                         <label className="label">
-                          <span className="label-text text-lg">
+                          <span className="text-lg label-text">
                             Select Member Photo
                           </span>
                         </label>
@@ -396,25 +430,28 @@ const Members = () => {
                           type="file"
                           accept=".png"
                           onChange={handleEditFileChange}
-                          className="file-input file-input-bordered file-input-md w-full"
+                          className="w-full file-input file-input-bordered file-input-md"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
                 {/* Footer */}
-                <div className="flex items-center justify-end p-6  border-solid border-gray-300 rounded-b">
+                <div className="flex items-center justify-end p-6 border-gray-300 border-solid rounded-b">
                   <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="px-6 py-2 mb-1 mr-1 text-sm font-bold text-red-500 uppercase transition-all duration-150 ease-linear outline-none background-transparent focus:outline-none"
                     type="button"
                     onClick={closeModal}
                   >
                     Close
                   </button>
                   <button
-                    className="bg-[#5393E8] text-white active:bg-[#5393E8] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className={`${
+                      !editMemberName || !selectedFile ? "bg-grey" : ""
+                    } bg-[#5393E8] text-white active:bg-[#5393E8] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
                     type="button"
                     onClick={handleEditSubmit}
+                    disabled={!editMemberName || !selectedFile}
                   >
                     Save Changes
                   </button>

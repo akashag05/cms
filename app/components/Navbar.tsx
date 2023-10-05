@@ -3,13 +3,13 @@ import React from "react";
 import logo from "../../assets/logo.png";
 const Navbar = () => {
   return (
-    <div className="absolute inset-0 flex  navbar top-7 h-24">
+    <div className="absolute inset-0 flex h-24 navbar top-7">
       <div className="navbar-start">
         <div className=" dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="w-5 h-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -24,7 +24,7 @@ const Navbar = () => {
           </label>
           <ul
             tabIndex={0}
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+            className="p-2 mt-3 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
           >
             <li>
               <p>About</p>
@@ -42,45 +42,45 @@ const Navbar = () => {
               <p>Contact</p>
             </li>
             <li>
-              <button className="uppercase px-6 py-3 mx-3 bg-blue rounded text-white font-semibold my-3">
+              <button className="px-6 py-3 mx-3 my-3 font-semibold text-white uppercase rounded bg-blue">
                 Login
               </button>
             </li>
             <li>
-              <button className="uppercase px-6 py-3 mx-3 bg-blue rounded text-white font-semibold my-3">
+              <button className="px-6 py-3 mx-3 my-3 font-semibold text-white uppercase rounded bg-blue">
                 Language
               </button>
             </li>
           </ul>
         </div>
         <div>
-          <Image src={logo} alt="" className="h-30 ml-16" />
+          <Image src={logo} alt="" className="ml-16 h-30" />
         </div>
       </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+      <div className="hidden navbar-center lg:flex">
+        <ul className="px-1 menu menu-horizontal">
           <li>
-            <p className="uppercase font-semibold">About</p>
+            <p className="font-semibold uppercase">About</p>
           </li>
           <li>
-            <p className="uppercase font-semibold">The Journey</p>
+            <p className="font-semibold uppercase">The Journey</p>
           </li>
           <li>
-            <p className="uppercase font-semibold">Project</p>
+            <p className="font-semibold uppercase">Project</p>
           </li>
           <li>
-            <p className="uppercase font-semibold">Event</p>
+            <p className="font-semibold uppercase">Event</p>
           </li>
           <li>
-            <p className="uppercase font-semibold">Contact</p>
+            <p className="font-semibold uppercase">Contact</p>
           </li>
         </ul>
       </div>
-      <div className="navbar-end hidden lg:flex">
-        <button className="uppercase px-6 py-3 mx-3 bg-blue rounded text-white font-semibold">
+      <div className="hidden navbar-end lg:flex">
+        <button className="px-6 py-3 mx-3 font-semibold text-white uppercase rounded bg-blue">
           Login
         </button>
-        <button className="uppercase px-6 py-3 mx-3 bg-blue rounded text-white font-semibold">
+        <button className="px-6 py-3 mx-3 font-semibold text-white uppercase rounded bg-blue">
           Language
         </button>
       </div>
