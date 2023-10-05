@@ -28,7 +28,7 @@ const Login = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    router.push("/Dash");
+    router.push("/Dashboard");
     setValidateForm(true);
     console.log(email, password);
   };
