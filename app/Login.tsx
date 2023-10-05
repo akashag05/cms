@@ -4,6 +4,9 @@ import Image from "next/image";
 // import Layout from "@/pages/Components/bLayout";
 // import { login } from "@/pages/api/login";
 import { useRouter } from "next/navigation";
+import { loginUser } from "./Api/login";
+import { ToastContainer, toast } from "react-toastify";
+
 // import Dashboard from "./Dashboard";
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,16 +29,23 @@ const Login = () => {
     setRememberMe(e.target.checked);
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    router.push("/Dashboard");
-    setValidateForm(true);
+    let response = await loginUser(email, password);
+    // console.log("-------------",response.type);
+    if (response && response.type) {
+      router.push("/Dashboard");
+    } else {
+     window.alert("Please Enter Valid Details!")
+    }
+    // setValidateForm(true);
     console.log(email, password);
   };
 
   return (
     <div className="h-screen">
       <br></br>
+      
       <div className="flex w-auto h-auto mt-24 justify-center items-center">
         <br></br>
         <div
@@ -43,7 +53,7 @@ const Login = () => {
           style={{ borderRadius: "15px", padding: "20px" }}
         >
           <div className="font-bold text-2xl p-2 border-b-2 border-blue">
-            Sign Up
+            Login
           </div>
           {/* <img
             src="/abgLogo.jpg"
@@ -62,6 +72,7 @@ const Login = () => {
               <label htmlFor="email" className="block pb-2 text-gray-600">
                 <label className="text-red">* </label>Email:
               </label>
+              
               <input
                 type="email"
                 id="email"
@@ -98,6 +109,8 @@ const Login = () => {
             </button>
             {/* </Link> */}
           </form>
+        
+
           <br></br>
         </div>
       </div>

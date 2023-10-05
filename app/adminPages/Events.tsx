@@ -8,6 +8,7 @@ import { deleteEventNews } from "../Api/deleteEvent";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseUrl } from "../../constants";
+import Link from "next/link";
 const Events = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   // const [memberName, setMemberName] = useState("");
