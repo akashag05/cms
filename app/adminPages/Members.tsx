@@ -10,6 +10,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
+import { baseUrl } from "../../constants";
 const Members = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [memberName, setMemberName] = useState("");
@@ -101,12 +102,9 @@ const Members = () => {
   const handleEdit = async (cell: any) => {
     setMemberID(cell.row.original.id);
     console.log("Single USer Data", memberID);
-    await fetch(
-      `http://localhost:5000/members/getMember/${cell.row.original.id}`,
-      {
-        method: "GET", // Use GET method for a GET request
-      }
-    )
+    await fetch(baseUrl + `/members/getMember/${cell.row.original.id}`, {
+      method: "GET", // Use GET method for a GET request
+    })
       .then((res) => res.json())
       .then((res) => {
         setEditMemberName(res[0].memberName);
@@ -124,7 +122,7 @@ const Members = () => {
       formData.append("memberName", editMemberName);
       console.log("formData", formData);
 
-      fetch(`http://localhost:5000/members/updateMember/${memberID}`, {
+      fetch(baseUrl + `/members/updateMember/${memberID}`, {
         method: "PUT",
         body: formData,
       })
@@ -266,7 +264,7 @@ const Members = () => {
                     className="p-2 ml-auto text-2xl text-black bg-transparent border-0 outline-none focus:outline-none"
                     onClick={() => setIsOpen(false)}
                   >
-                   <RxCross1 />
+                    <RxCross1 />
                   </button>
                 </div>
                 <div className="items-start divider"></div>
@@ -394,7 +392,7 @@ const Members = () => {
                     className="p-2 ml-auto text-2xl text-black bg-transparent border-0 outline-none focus:outline-none"
                     onClick={closeModal}
                   >
-                   <RxCross1 />
+                    <RxCross1 />
                   </button>
                 </div>
                 <div className="items-start divider"></div>

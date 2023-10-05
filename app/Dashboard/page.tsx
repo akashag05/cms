@@ -5,6 +5,7 @@ import logo from "../../assets/logo.png";
 import Users from "../adminPages/Users";
 import Blogs from "../adminPages/Blogs";
 import Members from "../adminPages/Members";
+import Events from "../adminPages/Events";
 
 const Dashboard = () => {
   interface section {
@@ -28,9 +29,8 @@ const Dashboard = () => {
       content = <Blogs />;
       break;
     case "events":
-      content = <h1>Our Services</h1>;
+      content = <Events />;
       break;
-
     case "members":
       content = <Members />;
       break;
@@ -66,6 +66,14 @@ const Dashboard = () => {
                 onClick={() => handleMenuClick("blog")}
               >
                 Blogs
+              </button>
+            </li>
+            <li className="mb-4">
+              <button
+                className="block hover:text-gray-300"
+                onClick={() => handleMenuClick("events")}
+              >
+                Events
               </button>
             </li>
             <li className="mb-4">

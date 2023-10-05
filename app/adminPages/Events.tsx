@@ -1,27 +1,13 @@
-import React, {
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useMemo,
-} from "react";
-import {
-  Column,
-  useTable,
-  useSortBy,
-  useGlobalFilter,
-  usePagination,
-} from "react-table";
-import { addBlog, fetchBlog, deleteblog } from "../Api/blogAPI";
+import React, { useState, useMemo } from "react";
+import { Column, useTable } from "react-table";
 import NoData from "../components/NoData";
-import { addMember } from "../Api/membersAPI";
 import { getAllEventsNews } from "../Api/getAllEvents";
-import { AiFillEdit } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
-import { close } from "fs";
+
 import { deleteEventNews } from "../Api/deleteEvent";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../constants";
 const Events = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   // const [memberName, setMemberName] = useState("");
@@ -75,7 +61,7 @@ const Events = () => {
       formData.append("participants", participants);
       // console.log("selectedfile", selectedFile);
 
-      fetch("http://localhost:5000/events/addEventNews", {
+      fetch(baseUrl + "/events/addEventNews", {
         method: "POST",
         body: formData,
       })
@@ -111,12 +97,9 @@ const Events = () => {
   const handleEdit = async (cell: any) => {
     setEventNewsID(cell.row.original.id);
     // console.log("Single USer Data", eventNewsID);
-    await fetch(
-      `http://localhost:5000/events/getEventsNewsById/${cell.row.original.id}`,
-      {
-        method: "GET", // Use GET method for a GET request
-      }
-    )
+    await fetch(baseUrl + `/events/getEventsNewsById/${cell.row.original.id}`, {
+      method: "GET", // Use GET method for a GET request
+    })
       .then((res) => res.json())
       .then((res) => {
         setEditTitle(res[0].title);
@@ -156,22 +139,26 @@ const Events = () => {
   useMemo(async () => {
     await getData().then((res) => {
       // console.log("res - ", res);
-      const filteredData = res.filter(
-        (item: any) => item.eventNewsType == options
-      );
-      // console.log("filtered", filteredData);
-      setData(filteredData);
+      if (res && res.length != 0) {
+        const filteredData = res.filter(
+          (item: any) => item.eventNewsType == options
+        );
+        // console.log("filtered", filteredData);
+        setData(filteredData);
+      }
     });
   }, [options]);
 
   useMemo(async () => {
     await getData().then((res) => {
       // console.log("res - ", res);
-      const filteredData = res.filter(
-        (item: any) => item.eventNewsType == options
-      );
-      // console.log("filtered", filteredData);
-      setData(filteredData);
+      if (res && res.length != 0) {
+        const filteredData = res.filter(
+          (item: any) => item.eventNewsType == options
+        );
+        // console.log("filtered", filteredData);
+        setData(filteredData);
+      }
     });
   }, [dataUpdate]);
   // console.log("sorted data", data);
@@ -385,7 +372,7 @@ const Events = () => {
                     className="p-2 ml-auto text-2xl text-black bg-transparent border-0 outline-none focus:outline-none"
                     onClick={() => setIsOpen(false)}
                   >
-                   <RxCross1 />
+                    <RxCross1 />
                   </button>
                 </div>
                 <div className="items-start divider"></div>
@@ -613,7 +600,7 @@ const Events = () => {
                     className="p-2 ml-auto text-2xl text-black bg-transparent border-0 outline-none focus:outline-none"
                     onClick={closeEditModal}
                   >
-                   <RxCross1 />
+                    <RxCross1 />
                   </button>
                 </div>
                 <div className="items-start divider"></div>
