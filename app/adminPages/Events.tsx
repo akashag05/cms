@@ -352,7 +352,7 @@ const Events = () => {
               Select Type :{" "}
             </label>
             <select
-              className="px-6 py-1 bg-white border border-gray-300 rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              className="px-6 py-1 font-semibold bg-white border-b-2 border-gray-200 rounded shadow-md appearance-none focus:outline-none focus:shadow-outline"
               name="options"
               value={options}
               onChange={(event: any) => setOptions(event.target.value)}
