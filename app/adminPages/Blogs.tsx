@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import NoData from "../components/NoData";
 import { deleteblog, fetchBlog, fetchSingleBlog } from "../Api/blogAPI";
 import { baseUrl } from "../../constants";
-
+import { ToastContainer, toast } from "react-toastify";
 const Blogs = () => {
   const [value, setValue] = useState("");
   const [blogHeading, setBlogHeading] = useState("");
@@ -14,6 +14,7 @@ const Blogs = () => {
   const [singleBlogData, setSingleBlogData] = useState<any>({});
   const [data, setData] = useState<any[]>([]); // Provide a type
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   // console.log(selectedFile);
   const getData = async () => {
@@ -53,8 +54,20 @@ const Blogs = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("File uploaded successfully:", data);
-        console.log("data", data);
+        setIsOpen(false);
+        if (data.type) {
+          toast.success("Added Successfully!", {
+            position: "bottom-right",
+            autoClose: 1000,
+          });
+          setBlogHeading("");
+          setPostedDate("");
+          setValue("");
+          setWrittenBy("");
+          getData();
+        }
+        // console.log("File uploaded successfully:", data);
+        // console.log("data", data);
         // console.log(res)
         // Perform any additional actions or update the UI as needed
       })
@@ -76,7 +89,13 @@ const Blogs = () => {
 
   const handleDelete = async (cellValue: any) => {
     let response = await deleteblog(cellValue.row.original.blog_id);
-    getData();
+    if (response.type) {
+      toast.error("Deleted Successfully!", {
+        position: "bottom-right",
+        autoClose: 1000,
+      });
+      getData();
+    }
   };
 
   const getSingleBlog = async (cellValue: any) => {
@@ -165,115 +184,156 @@ const Blogs = () => {
   return (
     <div className="p-3 bg-bggrey h-screen">
       <p className="text-xl pb-5">Blogs Management</p>
+      <ToastContainer />
       <div className="border border-grey bg-white">
         <div className="flex justify-end">
           <label
             className="uppercase px-4 py-2 mx-3 my-3 bg-blue rounded text-white font-semibold hover:cursor-pointer"
-            htmlFor="my-modal-4"
+            // htmlFor="my-modal-4"
+            onClick={() => setIsOpen(true)}
           >
             Add Blogs
           </label>
         </div>
 
         {/* --------------------Add user Modal Start----------------------*/}
-        <input type="checkbox" id="my-modal-4" className="modal-toggle" />
-        <div className="modal">
-          <div className="modal-box w-7/12 max-w-5xl">
-            <div className="flex justify-between">
-              <h3 className="font-bold text-lg">Add New Member</h3>
-              <label htmlFor="my-modal-4" className="hover:cursor-pointer">
-                <svg
-                  viewBox="0 0 24 24"
-                  width="28"
-                  height="28"
-                  stroke="black"
-                  strokeWidth="1.5"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="css-i6dzq1"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </label>
-            </div>
-            <div>
-              <div className="divider"></div>
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="label">
-                    <span className="label-text text-lg">
-                      Enter Blog Heading
-                    </span>
-                  </label>
-                  <input
-                    name="blogHeading"
-                    type="text"
-                    placeholder="Type here"
-                    value={blogHeading}
-                    className="input input-bordered w-full"
-                    onChange={(event: any) =>
-                      setBlogHeading(event.target.value)
-                    }
-                  />
+        {/* <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+        <div className="modal"> */}
+        {isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+            <div className="relative w-auto max-w-3xl mx-auto my-6">
+              {/* Content */}
+              <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+                {/* Header */}
+                <div className="flex items-start justify-between pt-3 px-3 border-solid border-gray-300 rounded-t">
+                  {/* <h3 className="font-bold text-lg">Blog Content</h3> */}
                 </div>
-                <div>
-                  <label className="label">
-                    <span className="label-text text-lg">Enter Blog Date</span>
-                  </label>
-                  <input
-                    name="blogDate"
-                    type="date"
-                    placeholder="Type here"
-                    value={postedDate}
-                    className="input input-bordered w-full"
-                    onChange={(event: any) => setPostedDate(event.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="label">
-                    <span className="label-text text-lg">Enter Written By</span>
-                  </label>
-                  <input
-                    name="writtenBy"
-                    type="text"
-                    placeholder="Type here"
-                    value={writtenBy}
-                    className="input input-bordered w-full"
-                    onChange={(event: any) => setWrittenBy(event.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="mt-5">
-                <label className="label">
-                  <span className="label-text text-lg">Blog Content</span>
-                </label>
-                <ReactQuill
-                  className="custom-editor"
-                  theme="snow"
-                  value={value}
-                  onChange={setValue}
-                  modules={{ toolbar: toolbarOptions }}
-                />
-              </div>
+                {/* <div className="divider"></div> */}
+                {/* Body */}
+                <div className="relative px-6 flex-auto">
+                  {" "}
+                  <div className="">
+                    <div className="flex justify-between">
+                      <h3 className="font-bold text-lg">Add New Blog</h3>
+                      <label
+                        htmlFor="my-modal-4"
+                        className="hover:cursor-pointer"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="28"
+                          height="28"
+                          stroke="black"
+                          strokeWidth="1.5"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="css-i6dzq1"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </label>
+                    </div>
+                    <div>
+                      <div className="divider"></div>
+                      <div className="grid grid-cols-2 gap-6">
+                        <div>
+                          <label className="label">
+                            <span className="label-text text-lg">
+                              Enter Blog Heading
+                            </span>
+                          </label>
+                          <input
+                            name="blogHeading"
+                            type="text"
+                            placeholder="Type here"
+                            value={blogHeading}
+                            className="input input-bordered w-full"
+                            onChange={(event: any) =>
+                              setBlogHeading(event.target.value)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="label">
+                            <span className="label-text text-lg">
+                              Enter Blog Date
+                            </span>
+                          </label>
+                          <input
+                            name="blogDate"
+                            type="date"
+                            placeholder="Type here"
+                            value={postedDate}
+                            className="input input-bordered w-full"
+                            onChange={(event: any) =>
+                              setPostedDate(event.target.value)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label className="label">
+                            <span className="label-text text-lg">
+                              Enter Written By
+                            </span>
+                          </label>
+                          <input
+                            name="writtenBy"
+                            type="text"
+                            placeholder="Type here"
+                            value={writtenBy}
+                            className="input input-bordered w-full"
+                            onChange={(event: any) =>
+                              setWrittenBy(event.target.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-5">
+                        <label className="label">
+                          <span className="label-text text-lg">
+                            Blog Content
+                          </span>
+                        </label>
+                        <ReactQuill
+                          className="custom-editor"
+                          theme="snow"
+                          value={value}
+                          onChange={setValue}
+                          modules={{ toolbar: toolbarOptions }}
+                        />
+                      </div>
 
-              <div className="modal-action flex justify-end mt-16">
-                <form method="dialog">
-                  {/* <div className="flex justify-end"> */}
-                  <button
-                    onClick={handleUpload}
-                    // disabled={!selectedFile}
-                    className="btn btn-primary"
-                  >
-                    Submit
-                  </button>
-                  {/* </div> */}
-                </form>
+                      <div className="modal-action flex pb-4 justify-end mt-16">
+                        <form method="dialog">
+                          {/* <div className="flex justify-end"> */}
+                          <button
+                            onClick={handleUpload}
+                            disabled={
+                              !blogHeading ||
+                              !postedDate ||
+                              !writtenBy ||
+                              !value
+                            }
+                            className="btn btn-primary"
+                          >
+                            Submit
+                          </button>
+                          {/* </div> */}
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Footer */}
               </div>
             </div>
           </div>
-        </div>
+        )}
+        {isOpen && <div className="fixed inset-0 bg-black opacity-50"></div>}
+        {/* </div> */}
         {/* --------------------Add user Modal End----------------------*/}
 
         {data.length != 0 ? (
@@ -322,13 +382,7 @@ const Blogs = () => {
           <NoData />
         )}
       </div>
-      <div className="flex justify-center items-center h-screen">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={openModal}
-        >
-          Open Modal
-        </button>
+      <div className="flex justify-center items-center ">
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-scroll outline-none focus:outline-none">
             <div className="relative h-screen w-screen mx-auto my-6">
@@ -336,7 +390,7 @@ const Blogs = () => {
               <div className="relative flex flex-col h-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
                 {/* Header */}
                 <div className="flex items-start justify-between pt-3 px-3 border-solid border-gray-300 rounded-t">
-                  <h3 className="font-bold text-lg">Edit Member Details</h3>
+                  <h3 className="font-bold text-lg">Blog Content</h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={closeModal}
