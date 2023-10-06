@@ -1,12 +1,7 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Column, useTable } from "react-table";
 import NoData from "../components/NoData";
-import {
-  addMember,
-  deleteMember,
-  getMember,
-  getMemberById,
-} from "../Api/membersAPI";
+import { deleteMember, getMember } from "../Api/membersAPI";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RxCross1 } from "react-icons/rx";
@@ -14,7 +9,10 @@ import { baseUrl } from "../../constants";
 const Members = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [memberName, setMemberName] = useState("");
+  const [memberProfession, setMemberProfession] = useState("");
   const [editMemberName, setEditMemberName] = useState("");
+  const [responseType, setResponseType] = useState<any>("");
+  const [editMemberProfession, setEditMemberPRofession] = useState("");
   const [data, setData] = useState<any[]>([]); // Provide a type
   const [memberID, setMemberID] = useState<any>(null); // Provide a type
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,11 +28,13 @@ const Members = () => {
       setSelectedFile(event.target.files[0]);
     }
   };
-  // console.log(selectedFile);
+
   const getData = async () => {
     let response = await getMember();
-    setData(response);
-    // console.log("get members response", response);
+    setData(response.data);
+    if (response.type) {
+      setResponseType("true");
+    }
   };
   useEffect(() => {
     getData();
@@ -49,6 +49,7 @@ const Members = () => {
       const formData = new FormData();
       formData.append("memberPhoto", selectedFile);
       formData.append("memberName", memberName);
+      formData.append("memberProfession", memberProfession);
       console.log("formData", formData);
 
       fetch(baseUrl + "/members/addMember", {
@@ -107,7 +108,9 @@ const Members = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setEditMemberName(res[0].memberName);
+        console.log("res", res);
+        setEditMemberName(res.data[0].memberName);
+        setEditMemberPRofession(res.data[0].memberProfession);
       })
       .then(() => {
         openModal();
@@ -120,6 +123,7 @@ const Members = () => {
       const formData = new FormData();
       formData.append("memberPhoto", selectedFile);
       formData.append("memberName", editMemberName);
+      formData.append("memberProfession", editMemberProfession);
       console.log("formData", formData);
 
       fetch(baseUrl + `/members/updateMember/${memberID}`, {
@@ -159,6 +163,10 @@ const Members = () => {
       {
         Header: "Member Name",
         accessor: "memberName",
+      },
+      {
+        Header: "Member Profession",
+        accessor: "memberProfession",
       },
       {
         Header: "Member Photo",
@@ -291,6 +299,23 @@ const Members = () => {
                             }
                           />
                         </div>
+                        <div>
+                          <label className="label">
+                            <span className="text-lg label-text">
+                              Enter Member Profession
+                            </span>
+                          </label>
+                          <input
+                            name="memberProfession"
+                            type="text"
+                            placeholder="Type here"
+                            value={memberProfession}
+                            className="w-full input input-bordered"
+                            onChange={(event: any) =>
+                              setMemberProfession(event.target.value)
+                            }
+                          />
+                        </div>
                         <div className="">
                           <label className="label">
                             <span className="text-lg label-text">
@@ -311,7 +336,9 @@ const Members = () => {
                           {/* <div className="flex justify-end"> */}
                           <button
                             onClick={handleUpload}
-                            disabled={!selectedFile || !memberName}
+                            disabled={
+                              !selectedFile || !memberName || !memberProfession
+                            }
                             className="btn btn-primary"
                           >
                             Submit
@@ -329,7 +356,7 @@ const Members = () => {
         {isOpen && <div className="fixed inset-0 bg-black opacity-50"></div>}
         {/* --------------------Add user Modal End----------------------*/}
 
-        {data.length != 0 ? (
+        {responseType == "true" ? (
           <div className="p-4 overflow-x-auto">
             <table className="min-w-full bg-white border border-grey">
               <thead>
@@ -418,6 +445,23 @@ const Members = () => {
                           }
                         />
                       </div>
+                      <div>
+                        <label className="label">
+                          <span className="text-lg label-text">
+                            Enter Member Profession
+                          </span>
+                        </label>
+                        <input
+                          name="memberProfession"
+                          type="text"
+                          placeholder="Type here"
+                          value={editMemberProfession}
+                          className="w-full input input-bordered"
+                          onChange={(event: any) =>
+                            setEditMemberPRofession(event.target.value)
+                          }
+                        />
+                      </div>
                       <div className="">
                         <label className="label">
                           <span className="text-lg label-text">
@@ -445,11 +489,15 @@ const Members = () => {
                   </button>
                   <button
                     className={`${
-                      !editMemberName || !selectedFile ? "bg-grey" : ""
+                      !editMemberProfession || !editMemberName || !selectedFile
+                        ? "bg-grey"
+                        : ""
                     } bg-[#5393E8] text-white active:bg-[#5393E8] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
                     type="button"
                     onClick={handleEditSubmit}
-                    disabled={!editMemberName || !selectedFile}
+                    disabled={
+                      !editMemberProfession || !editMemberName || !selectedFile
+                    }
                   >
                     Save Changes
                   </button>

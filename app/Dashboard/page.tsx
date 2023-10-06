@@ -20,7 +20,7 @@ const Home = () => {
     section_name: string;
     status: string;
   }
-  const [selectedMenu, setSelectedMenu] = useState("user");
+  const [selectedMenu, setSelectedMenu] = useState("members");
   const [data, setData] = useState<section[]>([]);
   const router = useRouter();
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
@@ -40,9 +40,9 @@ const Home = () => {
   };
   let content;
   switch (selectedMenu) {
-    case "user":
-      content = <Users />;
-      break;
+    // case "user":
+    //   content = <Users />;
+    //   break;
     case "blog":
       content = <Blogs />;
       break;
@@ -78,12 +78,20 @@ const Home = () => {
             <Image src={logo} alt="" className="w-20 h-24" />
           </div>
           <ul className="p-4">
-            <li className="mb-4">
+            {/* <li className="mb-4">
               <button
                 className="block hover:text-gray-300"
                 onClick={() => handleMenuClick("user")}
               >
                 Users
+              </button>
+            </li> */}
+            <li className="mb-4">
+              <button
+                className="block hover:text-gray-300"
+                onClick={() => handleMenuClick("members")}
+              >
+                Members
               </button>
             </li>
             <li className="mb-4">
@@ -92,14 +100,6 @@ const Home = () => {
                 onClick={() => handleMenuClick("blog")}
               >
                 Blogs
-              </button>
-            </li>
-            <li className="mb-4">
-              <button
-                className="block hover:text-gray-300"
-                onClick={() => handleMenuClick("members")}
-              >
-                Members
               </button>
             </li>
             <li className="mb-4">

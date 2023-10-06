@@ -330,13 +330,13 @@ const Blogs = () => {
           Open Modal
         </button>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
-            <div className="relative w-auto max-w-3xl mx-auto my-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-scroll outline-none focus:outline-none">
+            <div className="relative h-screen w-screen mx-auto my-6">
               {/* Content */}
-              <div className="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+              <div className="relative flex flex-col h-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
                 {/* Header */}
                 <div className="flex items-start justify-between pt-3 px-3 border-solid border-gray-300 rounded-t">
-                  <h3 className="font-bold text-lg">Edit Member deatils</h3>
+                  <h3 className="font-bold text-lg">Edit Member Details</h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={closeModal}
@@ -348,20 +348,21 @@ const Blogs = () => {
                 </div>
                 <div className="divider"></div>
                 {/* Body */}
-                <div className="relative px-6 flex-auto">
-                  {" "}
-                  <div className="flex flex-wrap justify-between">
-                    <div className="grid grid-cols-2 gap-6">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: singleBlogData.htmlContent,
-                        }}
-                      ></div>
+                <div className="relative flex-auto overflow-y-auto">
+                  <div className="px-6">
+                    <div className="flex flex-wrap justify-between">
+                      <div className="grid grid-cols-2 gap-6">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: singleBlogData.htmlContent,
+                          }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 {/* Footer */}
-                <div className="flex items-center justify-end p-6  border-solid border-gray-300 rounded-b">
+                <div className="flex items-center justify-end p-6 border-solid border-gray-300 rounded-b">
                   <button
                     className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
