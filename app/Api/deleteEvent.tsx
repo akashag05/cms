@@ -16,6 +16,7 @@ export const deleteEventNews = async (props: any) => {
         method: "DELETE", // Use GET method for a GET request
       }
     );
-    const data = await res.json();
-    return data;
+    // const data = await res.json();
+    // console.log("response in api",data)
+    return res.json();
   };

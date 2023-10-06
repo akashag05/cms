@@ -19,7 +19,7 @@ const Events = () => {
   const [editSelectedYear, setEditSelectedYear] = useState("");
   const [editSelectedImage, setEditSelectedImage] = useState<File | null>(null);
   const [editTitle, setEditTitle] = useState("");
-  const [eventType, setEventType] = useState("Events");
+  const [eventType, setEventType] = useState("events");
   const [editEventLink, setEditEventLink] = useState("");
   const [participants, setParticipants] = useState("");
   const [editShortDesc, setEditShortDesc] = useState("");
@@ -31,7 +31,7 @@ const Events = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [sortedData, setSortedData] = useState<any[]>([]);
   const [userData, setUserData] = useState<any[]>([]);
-  const [options, setOptions] = useState("Events");
+  const [options, setOptions] = useState("events");
   const [dataUpdate, setDataUpdate] = useState(false);
   // State to store the selected year
   const [selectedYear, setSelectedYear] = useState("");
@@ -60,7 +60,7 @@ const Events = () => {
       formData.append("eventNewsLink", eventLink);
       formData.append("eventNewsYear", selectedYear);
       formData.append("participants", participants);
-      // console.log("selectedfile", selectedFile);
+      console.log("eventype", eventType);
 
       fetch(baseUrl + "/events/addEventNews", {
         method: "POST",
@@ -72,19 +72,21 @@ const Events = () => {
           return res.json();
         })
         .then((data) => {
-          toast.success("Added Successfully!", {
-            position: "bottom-right",
-            autoClose: 1000,
-          });
-          console.log("File uploaded successfully:", data);
-          setIsOpen(false);
-          setDataUpdate(!dataUpdate);
-          setSelectedFile(null);
-          setEventLink("");
-          setParticipants("");
-          setSelectedYear("");
-          setTitle("");
-          setShortDesc("");
+          if (data.type) {
+            toast.success("Added Successfully!", {
+              position: "bottom-right",
+              autoClose: 1000,
+            });
+            console.log("File uploaded successfully:", data);
+            setIsOpen(false);
+            setDataUpdate(!dataUpdate);
+            setSelectedFile(null);
+            setEventLink("");
+            setParticipants("");
+            setSelectedYear("");
+            setTitle("");
+            setShortDesc("");
+          }
           // console.log("data", data);
           // console.log(res)
           // Perform any additional actions or update the UI as needed
@@ -128,15 +130,16 @@ const Events = () => {
   const handleDelete = async (cellValue: any) => {
     let response = await deleteEventNews(cellValue.row.original.id);
     console.log(response);
-    if (response) {
+    if (response.type) {
       toast.error("Deleted Successfully!", {
         position: "bottom-right",
         autoClose: 1000,
       });
       setDataUpdate(!dataUpdate);
+      // getData();
     }
-    // getData();
   };
+  console.log("---------------", dataUpdate);
   useMemo(async () => {
     await getData().then((res) => {
       // console.log("res - ", res);
@@ -294,12 +297,14 @@ const Events = () => {
           return res.json();
         })
         .then((data) => {
-          toast.success("Updated Successfully!", {
-            position: "bottom-right",
-            autoClose: 1000,
-          });
-          setDataUpdate(!dataUpdate);
-          setEditSelectedImage(null);
+          if (data.type) {
+            toast.success("Updated Successfully!", {
+              position: "bottom-right",
+              autoClose: 1000,
+            });
+            setDataUpdate(!dataUpdate);
+            setEditSelectedImage(null);
+          }
           // console.log("File uploaded successfully:", data);
           // console.log("data", data);
         })
@@ -345,8 +350,8 @@ const Events = () => {
               value={options}
               onChange={(event: any) => setOptions(event.target.value)}
             >
-              <option value="Events">Event</option>
-              <option value="News">News</option>
+              <option value="events">Event</option>
+              <option value="news">News</option>
             </select>
           </div>
 
@@ -399,8 +404,8 @@ const Events = () => {
                                 setEventType(event.target.value)
                               }
                             >
-                              <option value="Events">Event</option>
-                              <option value="News">News</option>
+                              <option value="events">Event</option>
+                              <option value="news">News</option>
                             </select>
                           </div>
                           <div className="relative inline-block text-left">

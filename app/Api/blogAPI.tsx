@@ -1,7 +1,7 @@
 import { baseUrl } from "../../constants";
 
 export const fetchBlog = async () => {
-  const res = await fetch(baseUrl+ "/blog/getAllBlogs", {
+  const res = await fetch(baseUrl + "/blog/getAllBlogs", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -25,7 +25,7 @@ export const addBlog = async (props: any) => {
 };
 
 export const fetchSingleBlog = async (props: any) => {
-  const res = await fetch(baseUrl+ `/blog/getSingleBlog/${props}`, {
+  const res = await fetch(baseUrl + `/blog/getSingleBlog/${props}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -35,11 +35,12 @@ export const fetchSingleBlog = async (props: any) => {
   return data;
 };
 export const deleteblog = async (props: any) => {
-  const res = await fetch(baseUrl+ `/blog/deleteBlog/${props}`, {
+  const res = await fetch(baseUrl + `/blog/deleteBlog/${props}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
   });
-  console.log(res);
+  // console.log(res);
+  return res.json();
 };
