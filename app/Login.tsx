@@ -34,9 +34,9 @@ const Login = () => {
     let response = await loginUser(email, password);
     // console.log("-------------",response.type);
     if (response && response.type) {
-      router.push("/Dashboard");
+      router.push("/Dashboard/Dashboard");
     } else {
-     window.alert("Please Enter Valid Details!")
+      window.alert("Please Enter Valid Details!");
     }
     // setValidateForm(true);
     console.log(email, password);
@@ -45,7 +45,7 @@ const Login = () => {
   return (
     <div className="h-screen">
       <br></br>
-      
+
       <div className="flex w-auto h-auto mt-24 justify-center items-center">
         <br></br>
         <div
@@ -72,7 +72,7 @@ const Login = () => {
               <label htmlFor="email" className="block pb-2 text-gray-600">
                 <label className="text-red">* </label>Email:
               </label>
-              
+
               <input
                 type="email"
                 id="email"
@@ -109,7 +109,6 @@ const Login = () => {
             </button>
             {/* </Link> */}
           </form>
-        
 
           <br></br>
         </div>

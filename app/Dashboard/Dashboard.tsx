@@ -1,27 +1,19 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import logo from "../../assets/logo.png";
 import Blogs from "../adminPages/Blogs";
 import Events from "../adminPages/Events";
 import Members from "../adminPages/Members";
-import Users from "../adminPages/Users";
-import router, { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-// import Activities from "./adminPages/Activities";
-// import AddSection from "./adminPages/AddSection";
-// import { fetchSection } from "./Api/api";
-// import DynamicForm from "./adminPages/DynamicForm";
-
-const Home = () => {
+const Dashboard = () => {
   interface section {
     section_id: number;
     section_name: string;
     status: string;
   }
   const [selectedMenu, setSelectedMenu] = useState("members");
-  const [data, setData] = useState<section[]>([]);
   const router = useRouter();
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
 
@@ -165,4 +157,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;
