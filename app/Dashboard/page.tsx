@@ -14,7 +14,7 @@ import Link from "next/link";
 // import { fetchSection } from "./Api/api";
 // import DynamicForm from "./adminPages/DynamicForm";
 
-const Home = () => {
+const Dashboard = () => {
   interface section {
     section_id: number;
     section_name: string;
@@ -165,4 +165,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

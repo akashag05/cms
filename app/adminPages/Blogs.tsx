@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { Column, useTable } from "react-table";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+// import ReactQuill from "react-quill";
+// import "react-quill/dist/quill.snow.css";
 import NoData from "../components/NoData";
 import { deleteblog, fetchBlog, fetchSingleBlog } from "../Api/blogAPI";
 import { baseUrl } from "../../constants";
@@ -245,7 +245,7 @@ const Blogs = () => {
                   />
                 </div>
               </div>
-              <div className="mt-5">
+              {/* <div className="mt-5">
                 <label className="label">
                   <span className="label-text text-lg">Blog Content</span>
                 </label>
@@ -256,7 +256,7 @@ const Blogs = () => {
                   onChange={setValue}
                   modules={{ toolbar: toolbarOptions }}
                 />
-              </div>
+              </div> */}
 
               <div className="modal-action flex justify-end mt-16">
                 <form method="dialog">

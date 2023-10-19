@@ -36,7 +36,7 @@ const Login = () => {
     if (response && response.type) {
       router.push("/Dashboard");
     } else {
-     window.alert("Please Enter Valid Details!")
+      window.alert("Please Enter Valid Details!");
     }
     // setValidateForm(true);
     console.log(email, password);
@@ -45,7 +45,7 @@ const Login = () => {
   return (
     <div className="h-screen">
       <br></br>
-      
+
       <div className="flex w-auto h-auto mt-24 justify-center items-center">
         <br></br>
         <div
@@ -66,13 +66,13 @@ const Login = () => {
           {/* <h1 className="text-xl font-bold pb-4 leading-tight tracking-tight text-gray-900 ">
             Sign in to your account
           </h1> */}
-          <form className="md:space-y-4" onSubmit={handleSubmit}>
+          <form className="md:space-y-4" >
             <div className="mb-4">
               <i className="fa fa-envelope icon"></i>
               <label htmlFor="email" className="block pb-2 text-gray-600">
                 <label className="text-red">* </label>Email:
               </label>
-              
+
               <input
                 type="email"
                 id="email"
@@ -99,17 +99,16 @@ const Login = () => {
                 required
               />
             </div>
-            {/* <Link href={validateForm ? "/components/Dashboard" : ""}> */}
-            <button
-              type="submit"
-              className="cursor-pointer w-full text-white bg-blue hover:bg-primary-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              style={{ marginTop: "34px" }}
-            >
-              Sign in
-            </button>
-            {/* </Link> */}
+            <Link href="/Dashboard">
+              <button
+                type="submit"
+                className="cursor-pointer w-full text-white bg-blue hover:bg-primary-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                style={{ marginTop: "34px" }}
+              >
+                Sign in
+              </button>
+            </Link>
           </form>
-        
 
           <br></br>
         </div>

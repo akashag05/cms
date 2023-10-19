@@ -179,10 +179,6 @@ const Events = () => {
         accessor: "eventNewsYear",
       },
       {
-        Header: "Description",
-        accessor: "shortDesc",
-      },
-      {
         Header: "Participants",
         accessor: "participants",
       },
@@ -204,6 +200,21 @@ const Events = () => {
       {
         Header: "Link",
         accessor: "eventNewsLink",
+      },
+      {
+        Header: "Description",
+        accessor: "shortDesc",
+        Cell: ({ cell }: any) => (
+          <div
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {cell.row.original.shortDesc.slice(0, 25)}
+          </div>
+        ),
       },
       {
         Header: "Actions",
@@ -285,7 +296,7 @@ const Events = () => {
       formData.append("participants", editParticipants);
       // console.log("formData in edit", formData);
 
-      fetch(`http://localhost:5000/events/updateEventNews/${eventNewsID}`, {
+      fetch(`http://127.0.0.1:5000/events/updateEventNews/${eventNewsID}`, {
         method: "PUT",
         body: formData,
       })
@@ -497,7 +508,7 @@ const Events = () => {
                               </span>
                             </label>
                             <textarea
-                              rows={1}
+                              rows={3}
                               placeholder="Enter Short Description"
                               className="w-full px-4 py-1 border border-gray-300 rounded shadow"
                               name="shortDesc"
@@ -536,7 +547,7 @@ const Events = () => {
         {/* --------------------Add user Modal End----------------------*/}
 
         {data.length != 0 ? (
-          <div className="p-4 overflow-x-auto">
+          <div className="p-4 overflow-x-scroll">
             <table className="min-w-full bg-white border border-grey">
               <thead>
                 {headerGroups.map((headerGroup, index) => (
@@ -726,7 +737,7 @@ const Events = () => {
                               </span>
                             </label>
                             <textarea
-                              rows={1}
+                              rows={3}
                               placeholder="Enter Short Description"
                               className="w-full px-4 py-1 border border-gray-300 rounded shadow"
                               name="shortDesc"
