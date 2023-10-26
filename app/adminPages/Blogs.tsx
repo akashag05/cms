@@ -1,20 +1,26 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { Column, useTable } from "react-table";
-// import ReactQuill from "react-quill";
-// import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css";
 import NoData from "../components/NoData";
 import { deleteblog, fetchBlog, fetchSingleBlog } from "../Api/blogAPI";
 import { baseUrl } from "../../constants";
 
 const Blogs = () => {
-  const [value, setValue] = useState("");
-  const [blogHeading, setBlogHeading] = useState("");
-  const [postedDate, setPostedDate] = useState("");
-  const [writtenBy, setWrittenBy] = useState("");
+  // const [value, setValue] = useState("");
+  // const [blogHeading, setBlogHeading] = useState("");
+  // const [postedDate, setPostedDate] = useState("");
+  // const [writtenBy, setWrittenBy] = useState("");
   const [singleBlogData, setSingleBlogData] = useState<any>({});
   const [data, setData] = useState<any[]>([]); // Provide a type
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const AddBlogContent = dynamic(
+    () => import("../adminComponent/AddBlogContent"),
+    {
+      ssr: false, // This ensures it's not loaded on the server side
+    }
+  );
   // console.log(selectedFile);
   const getData = async () => {
     let response = await fetchBlog();
@@ -25,46 +31,36 @@ const Blogs = () => {
     getData();
   }, []);
 
-  const toolbarOptions = [
-    [{ header: [] }], // headings
-    [{ font: [] }], // font style
-    ["bold", "italic", "underline", "strike"], // default buttons
-    [{ align: [] }], // add alignment dropdown
-    [{ list: "ordered" }, { list: "bullet" }], // list buttons
-    ["link", "image"], // add image button
-    ["clean"], // remove formatting button
-  ];
+  // const handleUpload = () => {
+  //   const data: any = {
+  //     blogHeading: blogHeading,
+  //     postedDate: postedDate,
+  //     writtenBy: writtenBy,
+  //     htmlContent: value,
+  //   };
+  //   console.log("add data", data);
+  //   // fetch(baseUrl + "/blog/addBlog", {
+  //   //   method: "POST",
+  //   //   headers: { "Content-Type": "application/json" },
+  //   //   body: JSON.stringify(data),
+  //   // })
+  //   //   .then((res) => {
+  //   //     console.log("response", res);
+  //   //     return res.json();
+  //   //   })
+  //   //   .then((data) => {
+  //   //     console.log("File uploaded successfully:", data);
+  //   //     console.log("data", data);
+  //   //     // console.log(res)
+  //   //     // Perform any additional actions or update the UI as needed
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Error uploading file:", error);
+  //   //     // Handle the error and update the UI accordingly
+  //   //   });
 
-  const handleUpload = () => {
-    const data: any = {
-      blogHeading: blogHeading,
-      postedDate: postedDate,
-      writtenBy: writtenBy,
-      htmlContent: value,
-    };
-    console.log("add data", data);
-    fetch(baseUrl + "/blog/addBlog", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        console.log("response", res);
-        return res.json();
-      })
-      .then((data) => {
-        console.log("File uploaded successfully:", data);
-        console.log("data", data);
-        // console.log(res)
-        // Perform any additional actions or update the UI as needed
-      })
-      .catch((error) => {
-        console.error("Error uploading file:", error);
-        // Handle the error and update the UI accordingly
-      });
-
-    // getData();
-  };
+  //   // getData();
+  // };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -85,6 +81,7 @@ const Blogs = () => {
     setSingleBlogData(response.data);
     openModal();
   };
+
   console.log(singleBlogData);
   const columns = React.useMemo<Column<any>[]>(
     () => [
@@ -198,7 +195,8 @@ const Blogs = () => {
                 </svg>
               </label>
             </div>
-            <div>
+            <AddBlogContent />
+            {/* <div>
               <div className="divider"></div>
               <div className="grid grid-cols-2 gap-6">
                 <div>
@@ -245,22 +243,15 @@ const Blogs = () => {
                   />
                 </div>
               </div>
-              {/* <div className="mt-5">
+              <div className="mt-5">
                 <label className="label">
                   <span className="label-text text-lg">Blog Content</span>
                 </label>
-                <ReactQuill
-                  className="custom-editor"
-                  theme="snow"
-                  value={value}
-                  onChange={setValue}
-                  modules={{ toolbar: toolbarOptions }}
-                />
-              </div> */}
+                <MyDraftJSEditor onData={handlehtml} />
+              </div>
 
               <div className="modal-action flex justify-end mt-16">
                 <form method="dialog">
-                  {/* <div className="flex justify-end"> */}
                   <button
                     onClick={handleUpload}
                     // disabled={!selectedFile}
@@ -268,10 +259,9 @@ const Blogs = () => {
                   >
                     Submit
                   </button>
-                  {/* </div> */}
                 </form>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* --------------------Add user Modal End----------------------*/}

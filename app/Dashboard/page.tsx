@@ -8,6 +8,7 @@ import Members from "../adminPages/Members";
 import Users from "../adminPages/Users";
 import router, { useRouter } from "next/navigation";
 import Link from "next/link";
+import Projects from "../adminPages/Projects";
 
 // import Activities from "./adminPages/Activities";
 // import AddSection from "./adminPages/AddSection";
@@ -52,6 +53,9 @@ const Dashboard = () => {
       break;
     case "events":
       content = <Events />;
+      break;
+    case "projects":
+      content = <Projects />;
       break;
     // case "addsection":
     //   content = <AddSection />;
@@ -107,7 +111,15 @@ const Dashboard = () => {
                 className="block hover:text-gray-300"
                 onClick={() => handleMenuClick("events")}
               >
-                Events
+                Media
+              </button>
+            </li>
+            <li className="mb-4">
+              <button
+                className="block hover:text-gray-300"
+                onClick={() => handleMenuClick("projects")}
+              >
+                Projects
               </button>
             </li>
           </ul>
