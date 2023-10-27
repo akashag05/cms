@@ -114,14 +114,14 @@ const Dashboard = () => {
                 Media
               </button>
             </li>
-            <li className="mb-4">
+            {/* <li className="mb-4">
               <button
                 className="block hover:text-gray-300"
                 onClick={() => handleMenuClick("projects")}
               >
                 Projects
               </button>
-            </li>
+            </li> */}
           </ul>
         </div>
       </aside>
