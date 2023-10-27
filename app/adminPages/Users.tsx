@@ -1,80 +1,51 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import {
   Column,
   useTable,
-  useSortBy,
-  useGlobalFilter,
-  usePagination,
 } from "react-table";
-import { addBlog, fetchBlog, deleteblog } from "../Api/blogAPI";
-import NoData from "../../components/NoData";
+import {
+  addUser,
+  deleteUser,
+  fetchUsers,
+  getSingleUser,
+} from "../Api/usersAPI";
+import NoData from "../components/NoData";
 
-const Blogs = () => {
+const Users = () => {
   const initialValue = {
-    blog_id: 0,
-    blog_title: "",
-    blog_image: {},
-    short_desc: "",
-    long_desc: "",
-    status: "",
+    userid: 0,
+    userName: "",
+    userEmail: "",
+    userPassword: "",
+    userStatus: "",
   };
-
   const [data, setData] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [form, setform] = useState(initialValue);
-  const [showModal, setShowModal] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [state, setState] = useState(null);
+  const [formData, setFormData] = useState(initialValue);
+
   const getData = async () => {
-    const fetchedData = await fetchBlog();
-    setData(fetchedData);
-    console.log("data in file", fetchedData);
+    const fetchedData = await fetchUsers();
+    // setData(fetchedData);
+    console.log("data in file", data);
   };
   useEffect(() => {
     getData();
   }, []);
 
-  const handleChange = (e: any) => {
-    console.log(e.target.value);
-    const { name, value } = e.target;
-    setform({ ...form, [name]: value });
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    let data: any;
-    try {
-      let response;
-      data = { ...form, blog_image: state };
-      const addData = async () => {
-        response = await addBlog(data);
-        // setResponse(response);
-      };
-      addData();
-      getData();
-    } catch (error) {
-      console.log(error);
-    }
-
-    console.log("Form Data after Submiting", data);
-    // console.log("Response From Api", response);
-  };
-
   const handleDelete = (e: any, cell: any) => {
-    console.log("cell value", cell.row.values.blog_id);
-    let id = cell.row.values.blog_id;
-    deleteblog(id);
+    console.log("cell value", cell.row.values.userid);
+    let id = cell.row.values.userid;
+    deleteUser(id);
     getData();
   };
-
   let fetchedData: any;
-
   const handleEdit = (e: any, cell: any) => {
-    let id = cell.row.values.blog_id;
+    let id = cell.row.values.userid;
     const getSingleData = async () => {
-      //   fetchedData = await getSingleUser(id);
+      fetchedData = await getSingleUser(id);
       setUserData(fetchedData);
-      //   console.log("Single USer Data", fetchedData.userName);
+      console.log("Single USer Data", fetchedData.userName);
     };
     getSingleData();
   };
@@ -82,28 +53,20 @@ const Blogs = () => {
   const columns = React.useMemo<Column<any>[]>(
     () => [
       {
-        Header: "Blog Id",
-        accessor: "blog_id",
+        Header: "User Id",
+        accessor: "userid",
       },
       {
-        Header: "Blog Title",
-        accessor: "blog_title",
+        Header: "User Name",
+        accessor: "userName",
       },
       {
-        Header: "Image",
-        accessor: "blog_image",
-      },
-      {
-        Header: "Short Description",
-        accessor: "short_desc",
-      },
-      {
-        Header: "Long Description",
-        accessor: "long_desc",
+        Header: "User Email",
+        accessor: "userEmail",
       },
       {
         Header: "Status",
-        accessor: "status",
+        accessor: "userStatus",
       },
       {
         Header: "Actions",
@@ -135,7 +98,7 @@ const Blogs = () => {
             <div className="modal">
               <div className="modal-box w-7/12 max-w-5xl">
                 <div className="flex justify-between">
-                  <h3 className="font-bold text-lg">Edit Blog Details</h3>
+                  <h3 className="font-bold text-lg">Edit User</h3>
                   <label htmlFor="my-modal-5" className="hover:cursor-pointer">
                     <svg
                       viewBox="0 0 24 24"
@@ -156,68 +119,53 @@ const Blogs = () => {
                 <div className="border border-grey p-4 m-3 rounded-md">
                   <div className="flex flex-wrap justify-between">
                     <div className="form-control w-full max-w-xs">
-                      <label className="label">Blog Title</label>
+                      <label className="label">User Name</label>
                       <input
                         type="text"
-                        name="blog_title"
-                        // value={fetchedData.blog_title}
-                        placeholder="Enter Blog Title"
+                        name="userName"
+                        // value={fetchedData.userName}
+                        placeholder="Enter User Name"
                         className="input input-bordered w-full max-w-xs"
                         onChange={handleChange}
                       />
                     </div>
                     <div className="form-control w-full max-w-xs">
-                      <label className="label">Upload Blog Image</label>
+                      <label className="label">User Email</label>
                       <input
-                        type="file"
-                        name="image"
-                        // value={form.userEmail}
-                        // placeholder="Enter User Email"
-                        className="file-input file-input-bordered w-full max-w-xs"
+                        type="email"
+                        name="userEmail"
+                        value={formData.userEmail}
+                        placeholder="Enter User Email"
+                        className="input input-bordered w-full max-w-xs"
                         onChange={handleChange}
                       />
                     </div>
                     <div className="form-control w-full max-w-xs">
-                      <label className="label">Short Description</label>
+                      <label className="label">User Password</label>
                       <input
                         type="password"
-                        name="short_desc"
-                        value={form.short_desc}
-                        placeholder="Enter Short Description"
+                        name="userPassword"
+                        value={formData.userPassword}
+                        placeholder="Enter User Password"
                         className="input input-bordered w-full max-w-xs"
                         onChange={handleChange}
                       />
                     </div>
                     <div className="form-control w-full max-w-xs">
-                      <label className="label">Long Description</label>
-                      <textarea
-                        className="textarea textarea-bordered"
-                        placeholder="Bio"
-                      ></textarea>
-                      {/* <input
-                    type="textarea"
-                    name="short_desc"
-                    value={form.short_desc}
-                    placeholder="Enter Short Description"
-                    className="input input-bordered w-full max-w-xs"
-                    onChange={handleChange}
-                  /> */}
-                    </div>
-                    <div className="form-control w-full max-w-xs">
-                      <label className="label">Blog Status</label>
+                      <label className="label">User Status</label>
                       <div className="flex">
                         <div className="m-4 flex mt-2">
                           <label>Active</label>
                           <input
                             type="radio"
                             name="Active"
-                            value={form.status}
+                            value={formData.userStatus}
                             className="radio"
-                            checked={form.status == "Active"}
+                            checked={formData.userStatus == "Active"}
                             onChange={() =>
-                              setform({
-                                ...form,
-                                status: "Active",
+                              setFormData({
+                                ...formData,
+                                userStatus: "Active",
                               })
                             }
                           />
@@ -228,13 +176,13 @@ const Blogs = () => {
                           <input
                             type="radio"
                             name="In-Active"
-                            value={form.status}
+                            value={formData.userStatus}
                             className="radio"
-                            checked={form.status == "In-Active"}
+                            checked={formData.userStatus == "In-Active"}
                             onChange={() =>
-                              setform({
-                                ...form,
-                                status: "In-Actibe",
+                              setFormData({
+                                ...formData,
+                                userStatus: "In-Actibe",
                               })
                             }
                           />
@@ -284,20 +232,43 @@ const Blogs = () => {
   );
 
   const tableInstance = useTable({ columns, data });
-
+//   console.log("table data", data.length);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     tableInstance;
 
+  const handleChange = (e: any) => {
+    console.log(e);
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = () => {
+    let response;
+    try {
+      const addData = async () => {
+        response = await addUser(formData);
+        // setResponse(response);
+      };
+      addData();
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("Form Data after Submiting", formData);
+    console.log("Response From Api", response);
+  };
+
   return (
     <div className="p-3 bg-bggrey h-screen">
-      <p className="text-xl pb-5">Blog Management</p>
+      <p className="text-xl pb-5">User Management</p>
       <div className="border border-grey bg-white">
         <div className="flex justify-end">
           <label
             className="uppercase px-4 py-2 mx-3 my-3 bg-blue rounded text-white font-semibold hover:cursor-pointer"
             htmlFor="my-modal-4"
           >
-            Add Blog
+            Add User
           </label>
         </div>
 
@@ -306,7 +277,7 @@ const Blogs = () => {
         <div className="modal">
           <div className="modal-box w-7/12 max-w-5xl">
             <div className="flex justify-between">
-              <h3 className="font-bold text-lg">Add New Blog</h3>
+              <h3 className="font-bold text-lg">Add New User</h3>
               <label htmlFor="my-modal-4" className="hover:cursor-pointer">
                 <svg
                   viewBox="0 0 24 24"
@@ -324,106 +295,93 @@ const Blogs = () => {
                 </svg>
               </label>
             </div>
-            <form onSubmit={handleSubmit}>
-              <div className="border border-grey p-4 m-3 rounded-md">
-                <div className="flex flex-wrap justify-between">
-                  <div className="form-control w-full max-w-xs">
-                    <label className="label">Blog Title</label>
-                    <input
-                      type="text"
-                      name="blog_title"
-                      value={form.blog_title}
-                      placeholder="Enter Blog title"
-                      className="input input-bordered w-full max-w-xs"
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-control w-full max-w-xs">
-                    <label className="label">Upload Blog Image</label>
-                    <input
-                      type="file"
-                      name="image"
-                      className="file-input file-input-bordered w-full max-w-xs"
-                      onChange={(e) => setState(e.target.files[0]!)}
-                    />
-                  </div>
-                  <div className="form-control w-full max-w-xs">
-                    <label className="label">Short Description</label>
-                    <input
-                      type="text"
-                      name="short_desc"
-                      value={form.short_desc}
-                      placeholder="Enter Short Description"
-                      className="input input-bordered w-full max-w-xs"
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-control w-full max-w-xs">
-                    <label className="label">Long Description</label>
-                    <textarea
-                      className="textarea textarea-bordered h-4"
-                      placeholder="Bio"
-                      name="long_desc"
-                      value={form.long_desc}
-                      onChange={handleChange}
-                    ></textarea>
-                  </div>
-                  <div className="form-control w-full max-w-xs">
-                    <label className="label">User Status</label>
-                    <div className="flex">
-                      <div className="m-4 flex mt-2">
-                        <label>Active</label>
-                        <input
-                          type="radio"
-                          name="Active"
-                          value={form.status}
-                          className="radio"
-                          checked={form.status == "Active"}
-                          onChange={() =>
-                            setform({
-                              ...form,
-                              status: "Active",
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="flex mt-2">
-                        {" "}
-                        <label>In-Active</label>
-                        <input
-                          type="radio"
-                          name="In-Active"
-                          value={form.status}
-                          className="radio"
-                          checked={form.status == "In-Active"}
-                          onChange={() =>
-                            setform({
-                              ...form,
-                              status: "In-Actibe",
-                            })
-                          }
-                        />
-                      </div>
+            <div className="border border-grey p-4 m-3 rounded-md">
+              <div className="flex flex-wrap justify-between">
+                <div className="form-control w-full max-w-xs">
+                  <label className="label">User Name</label>
+                  <input
+                    type="text"
+                    name="userName"
+                    value={formData.userName}
+                    placeholder="Enter User Name"
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-control w-full max-w-xs">
+                  <label className="label">User Email</label>
+                  <input
+                    type="email"
+                    name="userEmail"
+                    value={formData.userEmail}
+                    placeholder="Enter User Email"
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-control w-full max-w-xs">
+                  <label className="label">User Password</label>
+                  <input
+                    type="password"
+                    name="userPassword"
+                    value={formData.userPassword}
+                    placeholder="Enter User Password"
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-control w-full max-w-xs">
+                  <label className="label">User Status</label>
+                  <div className="flex">
+                    <div className="m-4 flex mt-2">
+                      <label>Active</label>
+                      <input
+                        type="radio"
+                        name="Active"
+                        value={formData.userStatus}
+                        className="radio"
+                        checked={formData.userStatus == "Active"}
+                        onChange={() =>
+                          setFormData({
+                            ...formData,
+                            userStatus: "Active",
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="flex mt-2">
+                      {" "}
+                      <label>In-Active</label>
+                      <input
+                        type="radio"
+                        name="In-Active"
+                        value={formData.userStatus}
+                        className="radio"
+                        checked={formData.userStatus == "In-Active"}
+                        onChange={() =>
+                          setFormData({
+                            ...formData,
+                            userStatus: "In-Actibe",
+                          })
+                        }
+                      />
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="flex justify-end">
-                <label htmlFor="my-modal-4">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    //   onClick={handleSubmit}
-                  >
-                    Submit
-                  </button>
-                </label>
-              </div>
-            </form>
+            </div>
+            <div className="flex justify-end">
+              <label
+                className="btn btn-primary"
+                htmlFor="my-modal-4"
+                onClick={handleSubmit}
+              >
+                Submit
+              </label>
+            </div>
           </div>
         </div>
         {/* --------------------Add user Modal End----------------------*/}
-
         {data.length != 0 ? (
           <div className="overflow-x-auto p-4">
             <table className="min-w-full bg-white border border-grey">
@@ -474,4 +432,4 @@ const Blogs = () => {
   );
 };
 
-export default Blogs;
+export default Users;

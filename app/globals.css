@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+.custom-editor {
+    height: 150px; /* Set your desired height here */
+  }

@@ -1,12 +1,12 @@
 export const fetchUsers = async () => {
-  const res = await fetch("http://localhost:8080/users", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await res.json();
-  return data;
+  // const res = await fetch("http://localhost:8080/users", {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // });
+  // const data = await res.json();
+  // return data;
 };
 
 export const addUser = async (props: any) => {
