@@ -42,6 +42,7 @@ app.get("/users", (req, res) => {
   });
 });
 
+
 //Router to INSERT/POST a learner's detail
 app.post("/addusers", (req, res) => {
   // console.log(req.body);
