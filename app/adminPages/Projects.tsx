@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from "react";
 import { Column, useTable } from "react-table";
 import NoData from "../components/NoData";

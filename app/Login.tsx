@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { loginUser } from "./Api/login";
 
-
 // import Dashboard from "./Dashboard";
 const Login = () => {
   const [email, setEmail] = useState("");
